@@ -1,0 +1,16 @@
+*.bak
+*.orig
+*.*~
+*ui*.h
+*CMakeFiles*
+*CMakeCache*
+*.cmake
+*.project
+*.cproject
+*.settings
+*.a
+*.o
+*.exe
+Makefile
+*moc*
+
