@@ -31,4 +31,16 @@ pushd ./Draw/test && cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
 popd
 make -j${NPROCESS} -C ./Draw/test -f Makefile clean all
 
+if ${FORCE_DELETE}; then
+    rm  -f ./DemoMisc/test/Makefile
+    rm -rf ./DemoMisc/test/CMakeFiles
+    rm  -f ./DemoMisc/test/CMakeCache.txt
+    rm  -f ./DemoMisc/test/cmake_install.cmake
+    rm  -f ./DemoMisc/test/ui_AppTestDemoMisc.h
+    rm  -f ./DemoMisc/test/moc_*
+    rm  -f ./DemoMisc/test/*.exe
+fi
+pushd ./DemoMisc/test && cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
+popd
+make -j${NPROCESS} -C ./DemoMisc/test -f Makefile clean all
 
