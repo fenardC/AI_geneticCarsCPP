@@ -5,6 +5,7 @@
 *CMakeFiles*
 *CMakeCache*
 *.cmake
+*.qmake.stash
 *.project
 *.cproject
 *.settings
