@@ -4,8 +4,10 @@
 #include <cstdlib>
 #include <QColor>
 #include <QRgb>
-#include <random>
 #include <map>
+#include <memory>
+#include <random>
+
 
 class GeneticIndividual;
 
@@ -33,7 +35,8 @@ class Misc {
         static int random(const int min, const int max);
 
     public:
-        static GeneticIndividual * randomInWeightedMap(const std::map<GeneticIndividual *, double> map);
+        static const std::shared_ptr<GeneticIndividual> &
+        randomInWeightedMap(const std::map<std::shared_ptr<GeneticIndividual>, double> & map);
 
         /* One single random generator for all random numbers. */
     private:

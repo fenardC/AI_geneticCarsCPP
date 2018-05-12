@@ -50,12 +50,20 @@ double Misc::random(const double min, const double max) {
     return dist(generator);
 }
 
+/* max value is excluded (as JAVA case).*/
 int Misc::random(const int min, const int max) {
-    std::uniform_int_distribution<int> dist(min, max);
-    return dist(generator);
+    int result = 0;
+
+    if (0 < max) {
+        std::uniform_int_distribution<int> dist(min, max - 1);
+        result = dist(generator);
+    }
+
+    return result;
 }
 
-GeneticIndividual * Misc::randomInWeightedMap(const std::map<GeneticIndividual *, double> map) {
+const std::shared_ptr<GeneticIndividual> &
+Misc::randomInWeightedMap(const std::map<std::shared_ptr<GeneticIndividual>, double> & map) {
     auto item = map.begin();
     std::advance(item, Misc::random(0, map.size()));
     return item->first;
