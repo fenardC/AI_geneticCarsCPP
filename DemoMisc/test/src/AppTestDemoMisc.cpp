@@ -1,11 +1,10 @@
 
+#include "Debug/main/inc/Logger.hpp"
 #include "DemoMisc/test/inc/AppTestDemoMisc.h"
+#include "Draw/main/inc/Drawer.hpp"
 #include "ui_AppTestDemoMisc.h"
 
 #include <QPainter>
-#include "Debug/main/inc/Logger.hpp"
-#include "Draw/main/inc/Drawer.hpp"
-
 
 AppTestDemoMisc::AppTestDemoMisc(QWidget * parent)
     : QMainWindow(parent)
@@ -13,7 +12,7 @@ AppTestDemoMisc::AppTestDemoMisc(QWidget * parent)
     , timer(new QTimer(this))
     , demo(nullptr) {
 
-    Logger::debug("AppTestDemoMisc()>");
+    Logger::trace("AppTestDemoMisc::AppTestDemoMisc()>");
     ui->setupUi(this);
 
     demo = new DemoCar();
@@ -21,13 +20,13 @@ AppTestDemoMisc::AppTestDemoMisc(QWidget * parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(DemoCar::CAR_MILLIS_PER_TICK);
 
-    Logger::debug("AppTestDemoMisc()<");
+    Logger::trace("AppTestDemoMisc::AppTestDemoMisc()<");
 }
 
 void AppTestDemoMisc::paintEvent(QPaintEvent * e) {
     QMainWindow::paintEvent(e);
 
-    Logger::debug("paintEvent()>");
+    Logger::trace("AppTestDemoMisc::paintEvent()>");
 
     Drawer drawer(this);
     drawer.setColor(QColor(Qt::white));
@@ -36,11 +35,11 @@ void AppTestDemoMisc::paintEvent(QPaintEvent * e) {
     drawer.drawString("Command : " + std::to_string(demo->getCommand()), 10, 70);
     demo->moveCar(drawer);
 
-    Logger::debug("paintEvent()<");
+    Logger::trace("AppTestDemoMisc::paintEvent()<");
 }
 
 AppTestDemoMisc::~AppTestDemoMisc() {
-    Logger::debug("~AppTest()<");
+    Logger::trace("AppTestDemoMisc~AppTestDemoMisc()<");
 
     timer->stop();
     delete timer;

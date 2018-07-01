@@ -1,7 +1,9 @@
+
+
 #include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
 #include "Misc/main/inc/Misc.hpp"
-#include <iostream>
+#include <ostream>
 
 
 #define assertEquals( string, val, expected, delta ) \
@@ -9,9 +11,6 @@
             std::cout << (string) << " " << (val) << " does not match " << (expected) << std::endl; \
         } \
 
-/**
- * Rigourous Test :-)
- */
 static void testApp() {
     const double delta = 1E-15;
     const double sqrtOf2 = sqrt(2.0);

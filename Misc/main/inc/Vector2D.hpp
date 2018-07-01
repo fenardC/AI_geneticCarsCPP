@@ -16,6 +16,9 @@ class Vector2D {
         Vector2D(const Vector2D & other);
 
     public:
+        ~Vector2D();
+
+    public:
         static Vector2D * add(const Vector2D & vector1, const Vector2D & vector2);
 
     public:

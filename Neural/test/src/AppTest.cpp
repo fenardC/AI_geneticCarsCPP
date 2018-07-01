@@ -28,8 +28,9 @@ static void testApp() {
     const double delta = 1E-15;
 
     Misc::init();
+
     {
-        Logger::debug(std::string("-------------------------"));
+        Logger::info(std::string("-------------------------"));
 
         NeuralNetwork * network = new NeuralNetwork();
 
@@ -57,11 +58,11 @@ static void testApp() {
             dnaNetwork->getListGene().push_back(static_cast<GeneticGene *>(geneDouble));
         }
 
-        Logger::debug(std::string("dnaNetwork : After push_back(): ") + dnaNetwork->toString());
+        Logger::info(std::string("dnaNetwork : After push_back(): ") + dnaNetwork->toString());
 
-        Logger::debug(std::string(""));
+        Logger::info(std::string(""));
         GeneticIndividual * const indiv = new GeneticIndividual(dnaNetwork);
-        Logger::debug(std::string("indiv : After new: ") + indiv->toString());
+        Logger::info(std::string("indiv : After new: ") + indiv->toString());
 
 
         network->initFromDna(*static_cast<GeneticDnaNeuralNetwork *>(indiv->getDna()));
@@ -77,8 +78,8 @@ static void testApp() {
         const int engineCommand = Misc::mix(-128.0, 128.0, network->getListResult()[0]);
         const int wheelCommand = Misc::mix(-128.0, 128.0, network->getListResult()[1]);
 
-        Logger::debug(std::string("engineCommand : ") + std::to_string(engineCommand));
-        Logger::debug(std::string("wheelCommand  : ") + std::to_string(wheelCommand));
+        Logger::info(std::string("engineCommand : ") + std::to_string(engineCommand));
+        Logger::info(std::string("wheelCommand  : ") + std::to_string(wheelCommand));
 
         dnaNetwork->destroy();
         delete dnaNetwork;
@@ -93,7 +94,7 @@ static void testApp() {
 
 
     {
-        Logger::debug(std::string("-------------------------"));
+        Logger::info(std::string("-------------------------"));
 
         NeuralNetwork * network = new NeuralNetwork(5.0);
         GeneticPopulation * population = new GeneticPopulation();
@@ -113,19 +114,19 @@ static void testApp() {
         for (auto indiv : population->getListIndividual()) {
             indiv->setScore(score);
             score += 2;
-            Logger::debug(std::string("indiv : ") + indiv->toString());
+            Logger::info(std::string("indiv : ") + indiv->toString());
         }
 
-        Logger::debug(std::string("-------------------------"));
+        Logger::info(std::string("-------------------------"));
 
         population->proceedNextGeneration();
 
         for (auto indiv : population->getListIndividual()) {
-            Logger::debug(std::string("indiv : ") + indiv->toString());
+            Logger::info(std::string("indiv : ") + indiv->toString());
         }
     }
 
-    Logger::debug(std::string("END"));
+    Logger::info(std::string("END"));
 }
 
 int main() {

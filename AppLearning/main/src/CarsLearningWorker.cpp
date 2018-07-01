@@ -147,13 +147,13 @@ void CarsLearningWorker::Worker::doCarLearning(Drawer & drawer) {
             if (trackCompletion > 99.1) {
                 car->getIndiv()->setScore(score + 2000);
 
-                Logger::debug(std::string("GENERATION : ") + std::to_string(parent.population->getGenerationNumber()));
-                Logger::debug(std::string("TRACK   ") + parent.currentTrack->getName());
-                Logger::debug(std::string("CAR     ") + car->getName());
-                Logger::debug(std::string("SCORE   ") + std::to_string(car->getIndiv()->getScore()));
-                Logger::debug(std::string("PERCENT (BEST): ") + std::to_string(trackCompletionBest) + std::string("\n"));
-                Logger::debug(std::string("PERCENT ") + std::to_string(trackCompletion) + std::string("\n"));
-                Logger::debug(car->getIndiv()->toString());
+                Logger::info(std::string("GENERATION : ") + std::to_string(parent.population->getGenerationNumber()));
+                Logger::info(std::string("TRACK   ") + parent.currentTrack->getName());
+                Logger::info(std::string("CAR     ") + car->getName());
+                Logger::info(std::string("SCORE   ") + std::to_string(car->getIndiv()->getScore()));
+                Logger::info(std::string("PERCENT (BEST): ") + std::to_string(trackCompletionBest) + std::string("\n"));
+                Logger::info(std::string("PERCENT ") + std::to_string(trackCompletion) + std::string("\n"));
+                Logger::info(car->getIndiv()->toString());
 
                 checkAndChangeTrack();
             }
@@ -165,7 +165,7 @@ void CarsLearningWorker::Worker::doCarLearning(Drawer & drawer) {
     if (!isOnSameTrack || (validCarAmount == validCarNoProgress)) {
         /* Create new generation. */
         parent.population->proceedNextGeneration();
-        Logger::debug(std::string("GENERATION : ") + std::to_string(parent.population->getGenerationNumber()));
+        Logger::info(std::string("GENERATION : ") + std::to_string(parent.population->getGenerationNumber()));
 
         for (size_t index = 0, carListSize = parent.carList.size(); index < carListSize; index++) {
             Car * const car = parent.carList[index];

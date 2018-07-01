@@ -129,7 +129,7 @@ class Car final {
         std::string name;
 
     private:
-        int maxIndexTriangleDiff;
+        unsigned int maxIndexTriangleDiff;
 
     private:
         Track * track;
@@ -168,7 +168,7 @@ class Car final {
         TextureModifier * textureModifier;
 
     private:
-        int bestIndexSpline;
+        unsigned int bestIndexSpline;
 
     private:
         int lap;

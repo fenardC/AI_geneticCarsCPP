@@ -17,6 +17,11 @@ Vector2D::Vector2D(const Vector2D & other)
     : Vector2D(other.x, other.y) {
 }
 
+Vector2D::~Vector2D() {
+    x = 0;
+    y = 0;
+}
+
 Vector2D * Vector2D::add(const Vector2D & vector1, const Vector2D & vector2) {
     return new Vector2D(vector1.x + vector2.x, vector1.y + vector2.y);
 }
@@ -26,7 +31,7 @@ double Vector2D::dot(const Vector2D & vector1, const Vector2D & vector2) {
 }
 
 Vector2D * Vector2D::getVector2DFromValueAngle(const double length, const double angleInDegree)  {
-    double angle = (Vector2D::PI * angleInDegree) / 180;
+    double angle = (Vector2D::PI * angleInDegree) / 180.0;
     return new Vector2D(length * cos(angle), length * sin(angle));
 }
 

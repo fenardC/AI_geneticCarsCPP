@@ -29,6 +29,6 @@ void Logger::trace(const std::string message) {
     }
 }
 
-bool Logger::enableDebug = true;
+bool Logger::enableDebug = false;
 bool Logger::enableInfo = true;
-bool Logger::enableTrace = true;
+bool Logger::enableTrace = false;
