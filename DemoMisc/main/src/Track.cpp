@@ -11,6 +11,12 @@ Track::Track(const std::string & name, BezierSpline2D * spline, double splineWid
     init();
 }
 
+Track::~Track() {
+    delete spline;
+#warning to be finished
+    //listTriangle
+}
+
 std::vector<Triple<const Vector2D *, const Vector2D *, const Vector2D *>>
 Track::getListTriangle() const {
     return listTriangle;
@@ -32,8 +38,6 @@ double Track::getSplineWidth() const {
     return splineWidth;
 }
 
-
-
 int Track::isPointInTrack(const Vector2D & pos) const {
     for (size_t i = 0; i < listTriangle.size(); i++) {
         const Triple<const Vector2D *, const Vector2D *, const Vector2D *> & tri = listTriangle[i];
@@ -45,6 +49,7 @@ int Track::isPointInTrack(const Vector2D & pos) const {
 
     return -1;
 }
+
 void Track::renderCenterLine(Drawer & d) const {
     const std::vector<const Vector2D *> listPoint = spline->getListResultPoint();
     const int listPointSize = listPoint.size();
@@ -89,9 +94,7 @@ void Track::renderDebug(Drawer & drawer) const {
 
         if (Track::DEBUG_ENABLED) {
             drawer.setColor(QColor(Qt::green));
-
             drawer.drawLine(firstX, firstY, secondX, secondY);
-            //
             drawer.drawLine(secondX, secondY, thirdX, thirdY);
             drawer.drawLine(firstX, firstY, thirdX, thirdY);
         }

@@ -1,6 +1,3 @@
-
-#include "Genetic/main/inc/GeneticPopulation.hpp"
-
 #include <map>
 #include <utility>
 #include <vector>
@@ -9,6 +6,7 @@
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDna.hpp"
 #include "Genetic/main/inc/GeneticIndividual.hpp"
+#include "Genetic/main/inc/GeneticPopulation.hpp"
 #include "Misc/main/inc/Couple.hpp"
 #include "Misc/main/inc/Misc.hpp"
 
@@ -63,7 +61,8 @@ void GeneticPopulation::proceedEvaluation() {
     for (auto indiv : listIndividual) {
         const double score(indiv->getScore());
         totalScore += score;
-        Logger::trace(std::string("GeneticPopulation::proceedEvaluation(): totalScore: ") + std::to_string(totalScore));
+        Logger::trace(std::string("GeneticPopulation::proceedEvaluation(): totalScore: ") +
+                      std::to_string(totalScore));
 
 
         if (0 == mapScore.count(score)) {
@@ -170,6 +169,7 @@ void GeneticPopulation::proceedSelection() {
             listSelection.push_back(listIndiv[i]);
             i++;
         }
+
         /* Go on with lower score. */
         oneScore++;
     }
@@ -196,8 +196,6 @@ void GeneticPopulation::proceedReproduction() {
             min = score;
         }
     }
-
-#warning to be done
 
     /* [min, max] => [1, bestWeight] */
     for (auto indiv : listSelection) {
@@ -250,7 +248,7 @@ void GeneticPopulation::proceedReproduction() {
         generateRandomIndividual();
     }
 
-    Logger::trace(std::string("GeneticPopulation::proceedReproductionBetweenSelectioned()<"));
+    Logger::trace(std::string("GeneticPopulation::proceedReproduction()<"));
 }
 
 void GeneticPopulation::proceedReproductionBetweenSelectioned() {

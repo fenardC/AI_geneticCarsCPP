@@ -16,7 +16,7 @@ class GeneticGeneObject : public GeneticGene {
         virtual ~GeneticGeneObject();
 
     public:
-        virtual GeneticGene * clone() /*const*/ override;
+        virtual GeneticGene * clone() override;
 
     public:
         virtual void destroy() override;

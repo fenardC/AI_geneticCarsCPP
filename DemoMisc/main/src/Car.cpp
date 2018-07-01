@@ -1,7 +1,10 @@
 #include "DemoMisc/main/inc/Car.hpp"
 
 #include <map>
+#include <sstream>
 
+#include "Debug/main/inc/Debugger.hpp"
+#include "Debug/main/inc/Logger.hpp"
 #include "DemoGui/main/inc/ScreenGeneticCar.hpp"
 #include "DemoMisc/main/inc/CarSensor.hpp"
 #include "DemoMisc/main/inc/CarSensorLine.hpp"
@@ -11,7 +14,6 @@
 #include "Draw/main/inc/Texture.hpp"
 #include "Draw/main/inc/TextureModifier.hpp"
 #include "Misc/main/inc/Misc.hpp"
-#include "Debug/main/inc/Debugger.hpp"
 
 Car::Car(std::string name, int typeSensor, double ratio)
     : name(name)
@@ -77,13 +79,24 @@ Car::Car(std::string name, int typeSensor, double ratio)
 
 Car::~Car() {
     {
-        auto deleteSensor = [](std::pair<std::string, const CarSensor *> pair) { delete pair.second; };
+        auto deleteSensor = [](std::pair<std::string, const CarSensor *> pair) {
+            std::ostringstream address;
+            address << static_cast<void const *>(pair.second);
+            Logger::debug("~Car(): sensor: " + address.str());
+            delete pair.second;
+        };
         std::for_each(mapRoadSensor.begin(), mapRoadSensor.end(), deleteSensor);
         mapRoadSensor.clear();
     }
     {
-        auto deleteSensorPoint = [](const CarSensorPoint * p) { delete p; };
-        std::for_each(listRoadCollision.begin(), listRoadCollision.end(), deleteSensorPoint);
+        auto deleteSensorPoint = [](const CarSensorPoint * p) {
+            std::ostringstream address;
+            address << static_cast<void const *>(p);
+            Logger::debug("~Car(): sensor point: " + address.str());
+            delete p;
+        };
+        std::for_each(listRoadCollision.begin(), listRoadCollision.end(),
+                      deleteSensorPoint);
         listRoadCollision.clear();
     }
     delete position;
@@ -113,7 +126,7 @@ int Car::getEngineCommand() const {
     return engineCommand;
 }
 
-GeneticIndividual * Car::getIndiv() const {
+std::shared_ptr<GeneticIndividual> & Car::getIndiv() {
     return indiv;
 }
 
@@ -221,7 +234,7 @@ void Car::setEngineCommand(int engineCommand) {
     this->engineCommand = engineCommand;
 }
 
-void Car::setIndiv(GeneticIndividual * indiv) {
+void Car::setIndiv(std::shared_ptr<GeneticIndividual> & indiv) {
     this->indiv = indiv;
 }
 

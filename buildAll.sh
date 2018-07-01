@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 
+set -e
 ##set -x
 
 ##FORCE_DELETE=true
@@ -69,4 +70,18 @@ fi
 pushd ./Neural/test && cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
 popd
 make -j${NPROCESS} -C ./Neural/test -f Makefile all
+
+
+if ${FORCE_DELETE}; then
+    rm  -f ./AppLearning/main/Makefile
+    rm -rf ./AppLearning/main/CMakeFiles
+    rm  -f ./AppLearning/main/CMakeCache.txt
+    rm  -f ./AppLearning/main/cmake_install.cmake
+    rm  -f ./AppLearning/main/ui_AppLearning.h
+    rm  -f ./AppLearning/main/moc_*
+    rm  -f ./AppLearning/main/*.exe
+fi
+pushd ./AppLearning/main && cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
+popd
+make -j${NPROCESS} -C ./AppLearning/main -f Makefile clean all
 

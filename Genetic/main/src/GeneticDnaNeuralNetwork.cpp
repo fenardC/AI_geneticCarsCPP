@@ -1,22 +1,18 @@
-
 #include "Genetic/main/inc/GeneticDnaNeuralNetwork.hpp"
 #include "Genetic/main/inc/GeneticGeneDouble.hpp"
-
-
 
 GeneticDnaNeuralNetwork::GeneticDnaNeuralNetwork(double min, double max, int geneSize, int nbGene)
     : ::GeneticDnaList()
     , geneSize(geneSize)
-    , min(min)
     , max(max)
+    , min(min)
     , nbGene(nbGene) {
 }
 
 GeneticDnaNeuralNetwork::~GeneticDnaNeuralNetwork() {
-
 }
 
-GeneticDnaNeuralNetwork * GeneticDnaNeuralNetwork::clone() { /*const*/
+GeneticDnaNeuralNetwork * GeneticDnaNeuralNetwork::clone() {
     GeneticDnaNeuralNetwork * dna = new GeneticDnaNeuralNetwork(min, max, geneSize, nbGene);
 
     for (GeneticGene * const gene : listGene) {

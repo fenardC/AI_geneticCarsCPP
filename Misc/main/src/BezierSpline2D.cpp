@@ -1,9 +1,13 @@
+#include <algorithm>
+#include <sstream>
+
+#include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/BezierSpline2D.hpp"
 
 BezierSpline2D::BezierSpline2D()
     : listResultPoint()
     , listResultPerpendicular() {
-};
+}
 
 BezierSpline2D::BezierSpline2D(const std::vector<Couple<Vector2D *, Vector2D *>> & pointsAndPerpList)
     : BezierSpline2D() {
@@ -12,6 +16,31 @@ BezierSpline2D::BezierSpline2D(const std::vector<Couple<Vector2D *, Vector2D *>>
         const Vector2D * normal = new Vector2D(c.getSecond()->getX(), c.getSecond()->getY());
         listResultPoint.push_back(point);
         listResultPerpendicular.push_back(normal);
+    }
+}
+
+BezierSpline2D::~BezierSpline2D() {
+    {
+        auto deleteVector = [](const Vector2D * p) {
+            std::ostringstream address;
+            address << static_cast<void const *>(p);
+            Logger::debug("~BezierSpline2D(): list points: " + address.str());
+
+            delete p;
+        };
+        std::for_each(listResultPoint.begin(), listResultPoint.end(), deleteVector);
+        listResultPoint.clear();
+    }
+    {
+        auto deleteVector = [](const Vector2D * p) {
+            std::ostringstream address;
+            address << static_cast<void const *>(p);
+            Logger::debug("~BezierSpline2D(): list perpendicular points: " + address.str());
+
+            delete p;
+        };
+        std::for_each(listResultPerpendicular.begin(), listResultPerpendicular.end(), deleteVector);
+        listResultPerpendicular.clear();
     }
 }
 

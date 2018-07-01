@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "Misc/main/inc/BezierSpline2D.hpp"
 #include "Draw/main/inc/Drawer.hpp"
+#include "Misc/main/inc/BezierSpline2D.hpp"
 #include "Misc/main/inc/Triple.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
 
@@ -12,6 +12,9 @@ class Track {
 
     public:
         Track(const std::string & name, BezierSpline2D * spline, double splineWidth, double maxLapMillis);
+
+    public:
+        ~Track();
 
     public:
         std::vector<Triple<const Vector2D *, const Vector2D *, const Vector2D *>> getListTriangle() const;

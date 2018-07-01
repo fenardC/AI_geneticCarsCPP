@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "DemoGui/main/inc/ScreenGeneticCar.hpp"
@@ -38,7 +39,7 @@ class Car final {
         int getEngineCommand() const;
 
     public:
-        GeneticIndividual * getIndiv() const;
+        std::shared_ptr<GeneticIndividual> & getIndiv();
 
     public:
         int getLap() const;
@@ -92,7 +93,7 @@ class Car final {
         void setEngineCommand(int engineCommand) ;
 
     public:
-        void setIndiv(GeneticIndividual * indiv) ;
+        void setIndiv(std::shared_ptr<GeneticIndividual> & indiv) ;
 
     public:
         void setLap(int lap) ;
@@ -134,7 +135,7 @@ class Car final {
         Track * track;
 
     private:
-        GeneticIndividual * indiv;
+        std::shared_ptr<GeneticIndividual> indiv;
 
     private:
         std::map<std::string, CarSensor *> mapRoadSensor;

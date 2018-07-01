@@ -1,5 +1,4 @@
 
-
 #include "Genetic/main/inc/GeneticGeneObject.hpp"
 #include "Misc/main/inc/Misc.hpp"
 
@@ -20,7 +19,7 @@ GeneticGeneObject::GeneticGeneObject(std::vector<CObject *> & listPossible, int 
 GeneticGeneObject::~GeneticGeneObject() {
 }
 
-GeneticGene * GeneticGeneObject::clone() { /*const*/
+GeneticGene * GeneticGeneObject::clone() {
     GeneticGeneObject * geneObject = new GeneticGeneObject(listPossible, size);
 
     for (CObject * d : code) {

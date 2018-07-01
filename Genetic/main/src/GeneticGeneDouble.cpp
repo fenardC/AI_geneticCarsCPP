@@ -2,11 +2,11 @@
 #include <sstream>
 #include <vector>
 
+#include "CObject/main/inc/CDouble.hpp"
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticGeneDouble.hpp"
 #include "Genetic/main/inc/GeneticDnaTree.hpp"
 #include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
-#include "CObject/main/inc/CDouble.hpp"
 #include "Misc/main/inc/Misc.hpp"
 
 GeneticGeneDouble::GeneticGeneDouble(double min, double max)
@@ -24,7 +24,7 @@ GeneticGeneDouble::~GeneticGeneDouble() {
     destroy();
 }
 
-GeneticGene * GeneticGeneDouble::clone() { /*const*/
+GeneticGene * GeneticGeneDouble::clone() {
     GeneticGeneDouble * geneDouble = new GeneticGeneDouble(min, max, size);
 
     for (CObject * c : code) {
@@ -44,7 +44,7 @@ void GeneticGeneDouble::destroy() {
         delete p;
     };
     //std::for_each(code.begin(), code.end(), deleteObject);
-#warning to be donee
+#warning to be done
     code.clear();
     Logger::debug("GeneticGeneDouble::destroy()<");
 }

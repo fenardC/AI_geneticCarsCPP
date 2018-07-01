@@ -12,7 +12,7 @@ class GeneticGene : public CObject {
         }
 
     public:
-        virtual GeneticGene * clone() /*const*/ override = 0;
+        virtual GeneticGene * clone() override = 0;
 
     public:
         virtual void destroy() = 0;
