@@ -15,14 +15,14 @@ AppTestDraw::AppTestDraw(QWidget * parent) :
 void AppTestDraw::paintEvent(QPaintEvent * e) {
     QMainWindow::paintEvent(e);
 
-    Logger::debug("paintEvent()>");
+    Logger::trace("paintEvent()>");
 
     Drawer drawer(this);
 
     TestDraw tester;
     tester.testDraw(drawer);
 
-    Logger::debug("paintEvent()<");
+    Logger::trace("paintEvent()<");
 }
 
 AppTestDraw::~AppTestDraw() {

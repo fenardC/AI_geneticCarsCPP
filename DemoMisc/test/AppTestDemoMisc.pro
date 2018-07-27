@@ -62,3 +62,6 @@ HEADERS += \
 
 FORMS += \
        ./src/AppTestDemoMisc.ui
+
+RESOURCES += \
+    ../../Draw/main/resources/images.qrc

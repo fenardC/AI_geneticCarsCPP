@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QBrush>
 #include <QPen>
+#include <QPixmap>
 
 class Drawer {
     public:
@@ -22,10 +23,8 @@ class Drawer {
     public:
         void drawDashedLine(const double posX1, const double posY1,
                             const double posX2, const double posY2) const;
-#if 0
     public:
-        void drawImage(const Image img, const double posX, const double posY);
-#endif
+        void drawImage(const QImage & img, const double posX, const double posY);
 
     public:
         void drawLine(const double posX1, const double posY1, const double posX2, const double posY2) const;

@@ -1,3 +1,4 @@
+#include "Draw/main/inc/Texture.hpp"
 #include "Draw/test/inc/TestDraw.hpp"
 #include "Misc/main/inc/Misc.hpp"
 
@@ -12,10 +13,32 @@
 TestDraw::TestDraw() {
 }
 
-/**
- * Rigourous Test :-)
- */
 void TestDraw::testDraw(Drawer & drawer) {
+    const double delta = 1E-15;
+
+    bool initDone = Texture::init();
+    assertEquals("Texture::init()", initDone ? 1.0 : 0.0, 1.0, delta);
+
+    TextureModifier * textureModifier = new TextureModifier();
+    textureModifier->setCenter(50, 25);
+    textureModifier->setAntialiasing(TextureModifier::ANTIALIASING_HIGH);
+
+    const QColor color(Qt::red);
+    textureModifier->setAngle(45.0);
+    textureModifier->setRatio(0.5);
+    textureModifier->setColor(color);
+
+    drawer.setColor(QColor(Qt::white));
+    Texture::draw(drawer, 50.0, 100.0, *textureModifier);
+    drawer.drawRect(50.0, 100.0, 4, 4);
+
+    textureModifier->setAngle(90.0);
+    drawer.setColor(QColor(Qt::white));
+    Texture::draw(drawer, 150.0, 100.0, *textureModifier);
+    drawer.drawRect(150.0, 100.0, 4, 4);
+
+    Texture::deInit();
+
     drawer.clear();
 
     drawer.setColor(QColor(Qt::green));
@@ -46,7 +69,6 @@ void TestDraw::testDraw(Drawer & drawer) {
     const int height = 160;
 
     drawer.drawRect(posX - 100.0, posY, width * 2, height);
-    // drawer.drawRect(posX, posY, width, height);
 
     drawer.setColor(QColor(Qt::red));
     drawer.drawArc(posX - width / 2, posY, width, height, 0, 90);
@@ -54,16 +76,11 @@ void TestDraw::testDraw(Drawer & drawer) {
     drawer.setColor(QColor(Qt::green));
     drawer.drawArc(posX - width / 2, posY, width, height, 0, -90);
 
-    // drawer.setColor(QColor(Qt::cyan));
-    // drawer.drawArc(posX, posY, width, height, -90, 90);
-
     for (int i = 0; i < 256; i++) {
         const QColor color(Misc::mix(0x00FF00, 0x0000FFF, i / 255.0));
-        // System.out.println(String.format("CYAN : 0x%08X", Color.CYAN.getRGB()));
-        // System.out.println(String.format("     : 0x%08X", color.getRGB()));
-        // System.out.println(String.format("BLUE : 0x%08X\n", Color.BLUE.getRGB()));
-
         drawer.setColor(color);
         drawer.fillCircle(50.0 + i, 400.0 - i, 50);
     }
+
+    delete textureModifier;
 }

@@ -1,14 +1,11 @@
-# 
-
 cmake_minimum_required (VERSION 3.6.2)
-
-##set(CMAKE_ECLIPSE_VERSION 4.6)
 
 project(AppTestDemoMisc)
 
 enable_language(CXX)
+set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -55,16 +52,16 @@ set(HEADERS
 set(UI_SOURCES ./src/AppTestDemoMisc.ui)
 qt5_wrap_ui(UI_GENERATED_HEADERS ${UI_SOURCES})
 
+set(RESOURCES ../../Draw/main/resources/images.qrc)
+
 set(CMAKE_AUTOMOC ON)
 
 set(CMAKE AUTOUIC ON)
 
+set(CMAKE_AUTORCC ON)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g -O0")
-message(${CMAKE_CXX_FLAGS})
-
-
-add_executable(AppTestDemoMisc WIN32 ${SOURCES} ${HEADERS} ${UI_GENERATED_HEADERS})
+add_executable(AppTestDemoMisc WIN32 ${SOURCES} ${HEADERS} ${UI_GENERATED_HEADERS} ${RESOURCES})
 target_link_libraries(AppTestDemoMisc Qt5::Widgets)
 

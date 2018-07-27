@@ -2,6 +2,8 @@
 
 #include <QColor>
 #include <QImage>
+#include <QPixmap>
+#include <string>
 
 #include "Draw/main/inc/Drawer.hpp"
 #include "Draw/main/inc/TextureModifier.hpp"
@@ -13,28 +15,29 @@ class Texture {
         Texture();
 
     public:
+        static void deInit();
+
+    public:
         static void draw(Drawer & drawer, const double posX, const double posY,
                          const TextureModifier & modifier);
 
     public:
-        static void init();
+        static bool init();
 
-#if 0
     private:
-        static void setcolor(const QColor color, const BufferedImage image);
-#endif
+        static void setcolor(const QColor color, QImage & image);
 
     private:
         static const bool DEBUG_ENABLED;
 
     private:
-        static const int IMAGE_TYPE;
+        static const QImage::Format IMAGE_TYPE;
 
     private:
         static const std::string IMAGE_PNG;
 
     private:
-        static QImage image;
+        static QPixmap * image;
 
     private:
         static int imageH;

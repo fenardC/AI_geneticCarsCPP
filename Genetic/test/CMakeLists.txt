@@ -1,15 +1,11 @@
-# 
-
 cmake_minimum_required (VERSION 3.6.2)
-
-##set(CMAKE_ECLIPSE_VERSION 4.6)
 
 project(AppTestGenetic CXX)
 
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)

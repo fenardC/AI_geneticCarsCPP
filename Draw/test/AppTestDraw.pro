@@ -25,23 +25,29 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
          ../../Debug/main/src/Logger.cpp \
-         ../../Draw/test/src/main.cpp \
-         ../../Draw/test/src/AppTestDraw.cpp \
-         ../../Draw/test/src/TestDraw.cpp \
          ../../Draw/main/src/Drawer.cpp \
-         ../../Misc/main/src/Misc.cpp
+         ../../Draw/main/src/Texture.cpp \
+         ../../Draw/main/src/TextureModifier.cpp \
+         ../../Draw/test/src/AppTestDraw.cpp \
+         ../../Draw/test/src/main.cpp \
+         ../../Draw/test/src/TestDraw.cpp \
+         ../../Misc/main/src/Misc.cpp \
+         ../../Misc/main/src/Vector2D.cpp
 
 INCLUDEPATH += ../..
 
 HEADERS += \
         ../../Debug/main/inc/Logger.hpp \
-        ../../Draw/test/inc/AppTestDraw.h \
-        ../../Draw/test/inc/TestDraw.hpp \
         ../../Draw/main/inc/Drawer.hpp \
+        ../../Draw/main/inc/DrawParameterNeuralNetwork.hpp \
         ../../Draw/main/inc/Texture.hpp \
         ../../Draw/main/inc/TextureModifier.hpp \
-        ../../Draw/main/inc/DrawParameterNeuralNetwork.hpp \
+        ../../Draw/test/inc/AppTestDraw.h \
+        ../../Draw/test/inc/TestDraw.hpp \
         ../../Misc/main/inc/Misc.hpp
 
 FORMS += \
        ./src/AppTestDraw.ui
+
+RESOURCES += \
+    ../main/resources/images.qrc

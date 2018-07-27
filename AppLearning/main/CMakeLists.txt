@@ -1,15 +1,11 @@
-#
-
 cmake_minimum_required (VERSION 3.6.2)
-
-##set(CMAKE_ECLIPSE_VERSION 4.6)
 
 project(AppLearning)
 
 enable_language(CXX)
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -99,12 +95,15 @@ set(HEADERS
 set(UI_SOURCES ./src/AppLearning.ui)
 qt5_wrap_ui(UI_GENERATED_HEADERS ${UI_SOURCES})
 
+set(RESOURCES ../../Draw/main/resources/images.qrc)
+
 set(CMAKE_AUTOMOC ON)
 
 set(CMAKE AUTOUIC ON)
 
+set(CMAKE_AUTORCC ON)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_executable(AppLearning WIN32 ${SOURCES} ${HEADERS} ${UI_GENERATED_HEADERS})
+add_executable(AppLearning WIN32 ${SOURCES} ${HEADERS} ${UI_GENERATED_HEADERS} ${RESOURCES})
 target_link_libraries(AppLearning Qt5::Widgets)
-

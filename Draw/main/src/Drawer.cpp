@@ -41,17 +41,12 @@ void Drawer::drawDashedLine(const double posX1, const double posY1,
     painter.drawLine(posX1, posY1, posX2, posY2);
 }
 
-#if 0
-void Drawer::drawImage(const Image img, const double posX, const double posY) {
-    const BufferStrategy strategy = canvas.getBufferStrategy();
+void Drawer::drawImage(const QImage & img, const double posX, const double posY) {
+    QPainter painter(device);
 
-    if (strategy != null) {
-        const Graphics graphics = strategy.getDrawGraphics();
-        graphics.drawImage(img, (int) posX, (int) posY, null);
-        graphics.dispose();
-    }
+    painter.drawImage(posX, posY, img);
 }
-#endif
+
 void Drawer::drawLine(const double posX1, const double posY1,
                       const double posX2, const double posY2) const {
     QPainter painter(device);
