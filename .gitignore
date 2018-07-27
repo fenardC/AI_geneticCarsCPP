@@ -5,6 +5,7 @@
 *CMakeFiles*
 *CMakeCache*
 *.cmake
+*.pro.user
 *.qmake.stash
 *.project
 *.cproject
@@ -15,4 +16,12 @@
 *.exe
 Makefile
 *moc*
+qrc_images.cpp
+AppLearning/main/AppLearning
+AppRace/main/AppRace
+DemoMisc/test/AppTestDemoMisc
+Draw/test/AppTestDraw
+Genetic/test/AppTestGenetic
+Misc/test/AppTestMisc
+Neural/test/AppTestNeural
 
