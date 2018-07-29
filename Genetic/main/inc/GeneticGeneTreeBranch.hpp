@@ -19,12 +19,13 @@ class GeneticGeneTreeBranch : public GeneticGeneObject {
         void destroy() override;
 
     public:
-        virtual bool equals(const GeneticGene & other) const override {
-            return false;
-        }
+        virtual bool equals(const GeneticGene & other) const override;
 
     public:
         int getLength() const;
+
+    public:
+        std::vector<GeneticGeneTreeBranch *> & getListBranch();
 
     public:
         std::vector<GeneticGeneTreeBranch *> getListGeneticGeneTreeBranch();
@@ -32,8 +33,6 @@ class GeneticGeneTreeBranch : public GeneticGeneObject {
     public:
         GeneticGeneTreeBranch * getParent() const;
 
-    public:
-        std::vector<GeneticGeneTreeBranch *> & getListBranch();
 
     public:
         void setParent(GeneticGeneTreeBranch * const parent);

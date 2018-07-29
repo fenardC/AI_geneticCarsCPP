@@ -1,13 +1,10 @@
 #pragma once
-
-#include <string>
-#include <vector>
-
 #include "Genetic/main/inc/GeneticDna.hpp"
 #include "Genetic/main/inc/GeneticGene.hpp"
 #include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
-
 #include "Misc/main/inc/Couple.hpp"
+#include <string>
+#include <vector>
 
 class GeneticDnaTree : public GeneticDna {
 
@@ -27,9 +24,8 @@ class GeneticDnaTree : public GeneticDna {
         void destroy() override;
 
     public:
-        virtual bool equals(const CObject & other) const override {
-            return false;
-        }
+        virtual bool equals(const CObject & other) const override;
+
     public:
         CObject * getCode() const override {
             return nullptr;

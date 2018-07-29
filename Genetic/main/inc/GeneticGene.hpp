@@ -1,9 +1,8 @@
 #pragma once
-
+#include "CObject/main/inc/CObject.hpp"
+#include "Debug/main/inc/Logger.hpp"
 #include <string>
 #include <vector>
-
-#include "CObject/main/inc/CObject.hpp"
 
 class GeneticGene : public CObject {
 
@@ -22,6 +21,7 @@ class GeneticGene : public CObject {
 
     public:
         bool equals(const CObject & /*other*/) const final override {
+            Logger::error(std::string("GeneticGene::equals(): returning false in all cases"));
             return false;
         };
 

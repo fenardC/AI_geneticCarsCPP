@@ -1,8 +1,6 @@
 #pragma once
-
-#include "Genetic/main/inc/GeneticDna.hpp"
 #include "CObject/main/inc/CObject.hpp"
-
+#include "Genetic/main/inc/GeneticDna.hpp"
 #include <memory>
 #include <sstream>
 
@@ -44,13 +42,13 @@ class GeneticIndividual {
         std::string toString() const;
 
     private:
-        double score;
-
-    private:
         bool bloodline;
 
     private:
         GeneticDna * dna;
+
+    private:
+        double score;
 
     private:
         CObject * tag;

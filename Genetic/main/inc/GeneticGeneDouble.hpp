@@ -1,9 +1,7 @@
 #pragma once
-
+#include "Genetic/main/inc/GeneticGene.hpp"
 #include <string>
 #include <vector>
-
-#include "Genetic/main/inc/GeneticGene.hpp"
 
 class GeneticGeneDouble : public GeneticGene {
 
@@ -30,7 +28,6 @@ class GeneticGeneDouble : public GeneticGene {
 
     public:
         std::vector<CObject *> & getValue() override;
-        // ObjectCpp * getValue() override;
 
     public:
         void mutate() override;
@@ -45,11 +42,11 @@ class GeneticGeneDouble : public GeneticGene {
         std::vector<CObject *> code;
 
     protected:
-        int size = 0;
+        double max;
 
     protected:
-        double min = 0;
+        double min;
 
     protected:
-        double max = 0;
+        int size;
 };

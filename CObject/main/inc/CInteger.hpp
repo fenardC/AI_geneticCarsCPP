@@ -1,10 +1,8 @@
 #pragma once
-
+#include "CObject/main/inc/CObject.hpp"
+#include "Debug/main/inc/Logger.hpp"
 #include <sstream>
 #include <string>
-
-#include "Debug/main/inc/Logger.hpp"
-#include "CObject/main/inc/CObject.hpp"
 
 class CInteger final : public CObject {
 
@@ -25,7 +23,17 @@ class CInteger final : public CObject {
         virtual ~CInteger() {
             std::ostringstream address;
             address << static_cast<void const *>(this);
-            Logger::trace(std::string("~CInteger(): ") + address.str());
+            Logger::trace(std::string("CInteger::~CInteger(): ") + address.str());
+        }
+
+    public:
+        static void assertEquals(const std::string & s, const CInteger val, const CInteger expected) {
+            const double delta = 1E-15;
+
+            if ((std::abs(val.value - expected.value)) > delta) {
+                Logger::error(s + std::string(" ") + std::to_string(val.value)  +
+                              std::string(" does not match ") + std::to_string(expected.value));
+            }
         }
 
     public:
@@ -35,9 +43,17 @@ class CInteger final : public CObject {
 
     public:
         bool equals(const CObject & other) const final override {
-            const CInteger & myOther = reinterpret_cast<const CInteger &>(other);
-            return value == myOther.value;
+            bool result = false;
 
+            try {
+                const CInteger & myOther = dynamic_cast<const CInteger &>(other);
+                result = (value == myOther.value);
+            }
+            catch (const std::bad_cast & e) {
+                Logger::error(std::string("CInteger::equals(): ") + std::string(e.what()));
+            }
+
+            return result;
         }
 
     public:

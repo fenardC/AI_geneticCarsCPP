@@ -1,8 +1,6 @@
 #pragma once
-
-#include <vector>
-
 #include "Genetic/main/inc/GeneticGene.hpp"
+#include <vector>
 
 class GeneticGeneObject : public GeneticGene {
 
@@ -46,10 +44,10 @@ class GeneticGeneObject : public GeneticGene {
         virtual std::string toString() const override;
 
     protected:
-        std::vector<CObject *> listPossible;
+        std::vector<CObject *> code;
 
     protected:
-        std::vector<CObject *> code;
+        std::vector<CObject *> listPossible;
 
     protected:
         int size = 0;

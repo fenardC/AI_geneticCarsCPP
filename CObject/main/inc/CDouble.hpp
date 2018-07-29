@@ -1,11 +1,9 @@
 #pragma once
-
+#include "CObject/main/inc/CObject.hpp"
+#include "Debug/main/inc/Logger.hpp"
 #include <iomanip>
 #include <sstream>
 #include <string>
-
-#include "Debug/main/inc/Logger.hpp"
-#include "CObject/main/inc/CObject.hpp"
 
 class CDouble final : public CObject {
 
@@ -21,7 +19,17 @@ class CDouble final : public CObject {
         virtual ~CDouble() {
             std::ostringstream address;
             address << static_cast<void const *>(this);
-            Logger::trace(std::string("~CDouble(): ") + address.str());
+            Logger::trace(std::string("CDouble::~CDouble(): ") + address.str());
+        }
+
+    public:
+        static void assertEquals(const std::string & s, const CDouble val, const CDouble expected) {
+            const double delta = 1E-15;
+
+            if ((std::abs(val.value - expected.value)) > delta) {
+                Logger::error(s + std::string(" ") + std::to_string(val.value)  +
+                              std::string(" does not match ") + std::to_string(expected.value));
+            }
         }
 
     public:
@@ -30,14 +38,23 @@ class CDouble final : public CObject {
         }
 
     public:
-        bool equals(const CObject & other) const final override {
-            const CDouble & myOther = reinterpret_cast<const CDouble &>(other);
-            return value == myOther.value;
+        double doubleValue() const {
+            return value;
         }
 
     public:
-        double doubleValue() const {
-            return value;
+        bool equals(const CObject & other) const final override {
+            bool result = false;
+
+            try {
+                const CDouble & myOther = dynamic_cast<const CDouble &>(other);
+                result = (value == myOther.value);
+            }
+            catch (const std::bad_cast & e) {
+                Logger::error(std::string("CDouble::equals(): ") + std::string(e.what()));
+            }
+
+            return result;
         }
 
     public:

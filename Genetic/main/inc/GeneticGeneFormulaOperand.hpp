@@ -1,11 +1,8 @@
 #pragma once
-
+#include "CObject/main/inc/CInteger.hpp"
+#include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
 #include <map>
 #include <vector>
-
-#include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
-#include "CObject/main/inc/CInteger.hpp"
-
 
 class GeneticGeneFormulaOperand final : public GeneticGeneTreeBranch {
 
@@ -19,9 +16,7 @@ class GeneticGeneFormulaOperand final : public GeneticGeneTreeBranch {
         GeneticGeneFormulaOperand * clone() /*const*/ override;
 
     public:
-        bool equals(const GeneticGene & other) const override {
-            return false;
-        }
+        bool equals(const GeneticGene & other) const override;
 
     public:
         bool isOperator() const;

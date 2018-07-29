@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Genetic/main/inc/GeneticDna.hpp"
 #include "Genetic/main/inc/GeneticDnaList.hpp"
 

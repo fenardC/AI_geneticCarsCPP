@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include "Genetic/main/inc/GeneticDnaTree.hpp"
+
+#include <string>
 
 class GeneticDnaTreeFormula final : public GeneticDnaTree {
 
