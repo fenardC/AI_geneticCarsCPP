@@ -13,6 +13,12 @@ void Logger::debug(const std::string message) {
     }
 }
 
+void Logger::error(const std::string message) {
+    /* enable automatic flushing */
+    std::cerr << std::unitbuf;
+    std::cerr << message << std::endl;
+}
+
 void Logger::info(const std::string message) {
     if (enableInfo) {
         /* enable automatic flushing */
