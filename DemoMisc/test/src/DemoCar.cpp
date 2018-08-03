@@ -1,10 +1,8 @@
-
 #include "Debug/main/inc/Logger.hpp"
 #include "DemoGui/main/inc/ScreenGeneticCar.hpp"
 #include "DemoMisc/test/inc/DemoCar.hpp"
 #include "Misc/main/inc/Misc.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
-
 #include <string>
 
 const double DemoCar::CAR_MILLIS_PER_TICK = 20.0;
@@ -23,8 +21,7 @@ DemoCar::~DemoCar() {
 }
 
 void DemoCar::initialize() {
-
-    Logger::trace("DemoCar::initialize() >");
+    Logger::trace(std::string("DemoCar::initialize()>"));
 
     car = new Car(std::string("Car_") + std::to_string(0),
                   DemoCar::CAR_SENSOR_TYPE, DemoCar::CAR_RATIO);
@@ -33,12 +30,11 @@ void DemoCar::initialize() {
     car->setPosition(new Vector2D(150.0, 150.0));
     car->setAngle(90);
 
-    Logger::trace("DemoCar::initialize() <");
+    Logger::trace(std::string("DemoCar::initialize()<"));
 }
 
 void DemoCar::moveCar(Drawer & drawer) {
-
-    Logger::trace("DemoCar::moveCar() >");
+    Logger::trace(std::string("DemoCar::moveCar()>"));
 
     /* Update Car with commands */
     const int engineCommand = Misc::mix(-128.0, 128.0, command);
@@ -52,8 +48,8 @@ void DemoCar::moveCar(Drawer & drawer) {
     car->setEngineCommand(engineCommand);
     car->setWheelCommand(wheelCommand);
     car->testTick(DemoCar::CAR_MILLIS_PER_TICK);
-    Logger::debug("DemoCar::moveCar() @ calling car->testRender()");
+    Logger::debug(std::string("DemoCar::moveCar() @ calling car->testRender()"));
     car->testRender(drawer);
 
-    Logger::trace("DemoCar::moveCar() <");
+    Logger::trace(std::string("DemoCar::moveCar() <"));
 }

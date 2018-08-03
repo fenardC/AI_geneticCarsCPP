@@ -278,9 +278,11 @@ void Car::tick(double millis) {
     /* Update Sensors */
     for (CarSensorPoint * sensor : listRoadCollision) {
         sensor->tick();
-        const int sensorLastIndexTriangle = sensor->getLastIndexTriangle();
+        const int lastIndexTriangle = sensor->getLastIndexTriangle();
 
-        if (sensorLastIndexTriangle > -1) {
+        if (lastIndexTriangle > -1) {
+            const unsigned int sensorLastIndexTriangle = lastIndexTriangle;
+
             if (sensorLastIndexTriangle > bestIndexSpline &&
                     sensorLastIndexTriangle <= bestIndexSpline + maxIndexTriangleDiff) {
                 bestIndexSpline = sensorLastIndexTriangle;
