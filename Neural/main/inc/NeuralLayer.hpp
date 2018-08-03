@@ -1,8 +1,7 @@
 #pragma once
-
-#include "Neural/main/inc/NeuralNeuron.hpp"
 #include "Neural/main/inc/NeuralActivation.hpp"
-
+#include "Neural/main/inc/NeuralNeuron.hpp"
+#include <memory>
 #include <vector>
 
 class NeuralLayer {
@@ -19,7 +18,7 @@ class NeuralLayer {
         NeuralLayer(const NeuralActivation * activationFunction, int nb);
 
     public:
-        void addNeuron(NeuralNeuron * neuron);
+        void addNeuron(std::shared_ptr<NeuralNeuron> neuron);
 
     public:
         void calculate() const;
@@ -28,11 +27,11 @@ class NeuralLayer {
         void connectAll(NeuralLayer & previousLayer);
 
     public:
-        std::vector<NeuralNeuron *> getListNeuron();
+        std::vector<std::shared_ptr<NeuralNeuron>> getListNeuron();
 
     public:
         void random(double min, double max);
 
     protected:
-        std::vector<NeuralNeuron *> listNeuron;
+        std::vector<std::shared_ptr<NeuralNeuron>> listNeuron;
 };

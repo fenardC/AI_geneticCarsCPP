@@ -16,12 +16,12 @@ NeuralNeuron::NeuralNeuron()
 }
 
 NeuralNeuron::NeuralNeuron(const NeuralActivation * activationFunction)
-    : threshold(0.0)
-    , listWeight()
+    : activationFunction(activationFunction)
     , listInput()
-    , output(0.0)
+    , listWeight()
     , newOutput(0.0)
-    , activationFunction(activationFunction) {
+    , output(0.0)
+    , threshold(0.0) {
 }
 
 NeuralNeuron::~NeuralNeuron() {
@@ -51,15 +51,8 @@ NeuralNeuron::~NeuralNeuron() {
     }
 }
 
-
-void NeuralNeuron::random(double min, double max) {
-    listWeight.clear();
-
-    for (size_t i = 0; i < listInput.size(); i++) {
-        listWeight.push_back(new CDouble(Misc::random(min, max)));
-    }
-
-    threshold = Misc::random(min, max);
+void NeuralNeuron::addInput(std::shared_ptr<NeuralInput> const input) {
+    listInput.push_back(input);
 }
 
 void NeuralNeuron::calculate() {
@@ -76,39 +69,44 @@ void NeuralNeuron::calculate() {
     }
 }
 
-void NeuralNeuron::addInput(NeuralInput * const input) {
-    listInput.push_back(input);
-}
-
-void NeuralNeuron::setThreshold(double threshold) {
-    this->threshold = threshold;
-}
-
-void NeuralNeuron::setActivationFunction(const NeuralActivation * activationFunction) {
-    this->activationFunction = activationFunction;
+std::vector<std::shared_ptr<NeuralInput>> & NeuralNeuron::getListInput() {
+    return listInput;
 }
 
 std::vector<CDouble *> & NeuralNeuron::getListWeight() {
     return listWeight;
 }
 
-std::vector<NeuralInput *> & NeuralNeuron::getListInput() {
-    return listInput;
+double NeuralNeuron::getNewOutput() const {
+    return newOutput;
 }
 
 double NeuralNeuron::getOutput() const {
     return output;
 }
 
-void NeuralNeuron::setOutput(double output) {
-    this->output = output;
-}
-
-double NeuralNeuron::getNewOutput() const {
-    return newOutput;
-}
-
 double NeuralNeuron::getValue() const {
     return output;
 }
 
+void NeuralNeuron::random(double min, double max) {
+    listWeight.clear();
+
+    for (size_t i = 0; i < listInput.size(); i++) {
+        listWeight.push_back(new CDouble(Misc::random(min, max)));
+    }
+
+    threshold = Misc::random(min, max);
+}
+
+void NeuralNeuron::setActivationFunction(const NeuralActivation * activationFunction) {
+    this->activationFunction = activationFunction;
+}
+
+void NeuralNeuron::setOutput(double output) {
+    this->output = output;
+}
+
+void NeuralNeuron::setThreshold(double threshold) {
+    this->threshold = threshold;
+}

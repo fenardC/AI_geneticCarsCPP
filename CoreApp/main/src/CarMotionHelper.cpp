@@ -1,6 +1,3 @@
-#include <map>
-#include <vector>
-
 #include "CoreApp/main/inc/CarMotionHelper.hpp"
 #include "Debug/main/inc/Logger.hpp"
 #include "DemoGui/main/inc/ScreenGeneticCar.hpp"
@@ -16,6 +13,9 @@
 #include "Neural/main/inc/NeuralInputValue.hpp"
 #include "Neural/main/inc/NeuralLayer.hpp"
 #include "Neural/main/inc/NeuralNetwork.hpp"
+#include <map>
+#include <vector>
+
 
 CarMotionHelper::CarMotionHelper()
     : network(NETWORK_GENE_VALUE_MAX) {
@@ -31,14 +31,14 @@ NeuralNetwork & CarMotionHelper::getNetwork() {
 void CarMotionHelper::initNetwork() {
     /* Add entry for sensors. */
     for (int i = 0; i < ScreenGeneticCar::SENSOR_LINE_NUMBER; i++) {
-        network.addInput(new NeuralInputValue());
+        network.addInput(std::make_shared<NeuralInputValue>());
     }
 
     /* Add one more for speed. */
-    network.addInput(new NeuralInputValue());
+    network.addInput(std::make_shared<NeuralInputValue>());
 
     /* 2 neurons x (8 sensors lines + speed input + threshold) */
-    NeuralLayer * const layerOuput = new NeuralLayer(NeuralActivation::SIGMOID, NETWORK_NUMBER_OF_NEURONS);
+    auto layerOuput = std::make_shared<NeuralLayer>(NeuralActivation::SIGMOID, NETWORK_NUMBER_OF_NEURONS);
     network.addLayer(layerOuput);
     network.connectAllInputOnFirstLayer();
 }
@@ -73,7 +73,6 @@ void CarMotionHelper::moveCar(Drawer & drawer, Car & car) {
     car.render(drawer);
 }
 
-
 void CarMotionHelper::displayTrackForCar(Drawer & drawer, const Track & track) {
     track.renderDebug(drawer);
     track.renderCenterLine(drawer);
@@ -94,11 +93,11 @@ void CarMotionHelper::startCarOnTrack(Track * const track, Car & car) {
 
 const int CarMotionHelper::CAR_MILLIS_PER_TICK = 18;
 
-const int CarMotionHelper::WORKER_DELAY_IN_MS = 10;
-
 const double CarMotionHelper::CAR_RATIO = 0.5;
 
 const int CarMotionHelper::CAR_SENSOR_TYPE = ScreenGeneticCar::TYPE_SENSOR_LINE;
+
+const int CarMotionHelper::WORKER_DELAY_IN_MS = 10;
 
 const int CarMotionHelper::NETWORK_ENGINE_INPUT_INDEX = ScreenGeneticCar::SENSOR_LINE_NUMBER;
 

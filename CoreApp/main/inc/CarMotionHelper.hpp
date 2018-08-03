@@ -1,11 +1,9 @@
 
 #pragma once
-
 #include "DemoMisc/main/inc/Car.hpp"
 #include "DemoMisc/main/inc/Track.hpp"
 #include "Draw/main/inc/Drawer.hpp"
 #include "Neural/main/inc/NeuralNetwork.hpp"
-
 
 class CarMotionHelper {
     public:
@@ -33,13 +31,13 @@ class CarMotionHelper {
         static const int CAR_MILLIS_PER_TICK;
 
     protected:
-        static const int WORKER_DELAY_IN_MS;
-
-    protected:
         static const double CAR_RATIO;
 
     protected:
         static const int CAR_SENSOR_TYPE;
+
+    protected:
+        static const int WORKER_DELAY_IN_MS;
 
     private:
         static const int NETWORK_ENGINE_INPUT_INDEX;

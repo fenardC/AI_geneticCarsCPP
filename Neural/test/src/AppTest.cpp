@@ -1,55 +1,48 @@
-
-
-#include "Debug/main/inc/Logger.hpp"
 #include "CObject/main/inc/CDouble.hpp"
+#include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDnaListObject.hpp"
 #include "Genetic/main/inc/GeneticDnaNeuralNetwork.hpp"
 #include "Genetic/main/inc/GeneticGeneDouble.hpp"
 #include "Genetic/main/inc/GeneticIndividual.hpp"
 #include "Genetic/main/inc/GeneticPopulation.hpp"
-#include "Misc/main/inc/Vector2D.hpp"
 #include "Misc/main/inc/Misc.hpp"
 #include "Neural/main/inc/NeuralActivation.hpp"
 #include "Neural/main/inc/NeuralInputValue.hpp"
 #include "Neural/main/inc/NeuralLayer.hpp"
 #include "Neural/main/inc/NeuralNetwork.hpp"
-
 #include <memory>
-#include <ostream>
-#include <string>
 
+static const double NETWORK_GENE_VALUE_MAX = 5.0;
 
-#define assertEquals( string, val, expected, delta ) \
-        if((std::abs((val) - (expected))) > (delta)) { \
-            std::cout << (string) << " " << (val) << " does not match " << (expected) << std::endl; \
-        } \
+static const int NETWORK_GENE_SIZE = 1;
 
 static void testApp() {
-    const double delta = 1E-15;
 
     {
         Logger::info(std::string("-------------------------"));
 
-        NeuralNetwork * network = new NeuralNetwork();
+        auto network = std::make_unique<NeuralNetwork>();
 
-        network->addInput(new NeuralInputValue());
-        network->addInput(new NeuralInputValue());
-        network->addInput(new NeuralInputValue());
-        network->addInput(new NeuralInputValue());
+        network->addInput(std::make_shared<NeuralInputValue>());
+        network->addInput(std::make_shared<NeuralInputValue>());
+        network->addInput(std::make_shared<NeuralInputValue>());
+        network->addInput(std::make_shared<NeuralInputValue>());
 
         /* 2 neurons x (3 inputs + threshold) */
-        GeneticDnaNeuralNetwork * const dnaNetwork = new GeneticDnaNeuralNetwork(0.0, 5.0, 1, 2 * 5);
+        const auto dnaNetwork = std::make_unique<GeneticDnaNeuralNetwork>(-NETWORK_GENE_VALUE_MAX, NETWORK_GENE_VALUE_MAX,
+                                NETWORK_GENE_SIZE, 2 * 5);
 
-        NeuralLayer * const layerOuput = new NeuralLayer(NeuralActivation::SIGMOID, 2);
+        const auto layerOuput = std::make_shared<NeuralLayer>(NeuralActivation::SIGMOID, 2);
         network->addLayer(layerOuput);
         network->connectAllInputOnFirstLayer();
 
         const double weights[5 * 2] = {
             1.0, 2.0, 3.0, 4.0, 5.0,
-            1.0, 2.0, 3.0, 4.0, 5.0
+            1.1, 2.1, 3.1, 4.1, 5.1
         };
+        const int weightsCount = sizeof(weights) / sizeof(weights[0]);
 
-        for (int i = 0; i < 2 * 5; i++) {
+        for (int i = 0; i < weightsCount; i++) {
             GeneticGeneDouble * geneDouble = new GeneticGeneDouble(0, 5, 1);
             CDouble * weight = new CDouble(weights[i]);
             geneDouble->getCode().push_back(weight);
@@ -59,7 +52,7 @@ static void testApp() {
         Logger::info(std::string("dnaNetwork : After push_back(): ") + dnaNetwork->toString());
 
         Logger::info(std::string(""));
-        GeneticIndividual * const indiv = new GeneticIndividual(dnaNetwork);
+        GeneticIndividual * const indiv = new GeneticIndividual(dynamic_cast<GeneticDna *>(dnaNetwork.get()));
         Logger::info(std::string("indiv : After new: ") + indiv->toString());
 
 
@@ -67,7 +60,7 @@ static void testApp() {
 
         /* Update network with line sensor values for inputs */
         for (int i = 0; i < 4; i++) {
-            network->setInputValue(i, double(2));
+            network->setInputValue(i, 2.0);
         }
 
         network->calculate();
@@ -80,27 +73,20 @@ static void testApp() {
         Logger::info(std::string("wheelCommand  : ") + std::to_string(wheelCommand));
 
         dnaNetwork->destroy();
-        delete dnaNetwork;
-#if 0
         indiv->destroy();
         delete indiv;
-
-        delete network;
-#endif
     }
-
-
 
     {
         Logger::info(std::string("-------------------------"));
 
-        NeuralNetwork * network = new NeuralNetwork(5.0);
-        GeneticPopulation * population = new GeneticPopulation();
+        auto network = std::make_unique<NeuralNetwork>(NETWORK_GENE_VALUE_MAX);
+        auto population = std::make_unique<GeneticPopulation>();
 
-        network->addInput(new NeuralInputValue());
-        network->addInput(new NeuralInputValue());
+        network->addInput(std::make_shared<NeuralInputValue>());
+        network->addInput(std::make_shared<NeuralInputValue>());
 
-        NeuralLayer * const layerOuput = new NeuralLayer(NeuralActivation::SIGMOID, 2);
+        const auto layerOuput = std::make_shared<NeuralLayer>(NeuralActivation::SIGMOID, 2);
         network->addLayer(layerOuput);
         network->connectAllInputOnFirstLayer();
 
@@ -119,7 +105,7 @@ static void testApp() {
 
         population->proceedNextGeneration();
 
-        for (auto indiv : population->getListIndividual()) {
+        for (auto const indiv : population->getListIndividual()) {
             Logger::info(std::string("indiv : ") + indiv->toString());
         }
     }
