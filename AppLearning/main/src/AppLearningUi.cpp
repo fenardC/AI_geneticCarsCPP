@@ -1,24 +1,22 @@
-
 #include "AppLearning/main/inc/AppLearningUi.h"
 #include "AppLearning/main/inc/AppLearning.hpp"
 #include "CoreApp/main/inc/CarMotionHelper.hpp"
 #include "Debug/main/inc/Logger.hpp"
 #include "ui_AppLearning.h"
-
 #include <QPainter>
 
 AppLearningUi::AppLearningUi(QWidget * parent)
     : QMainWindow(parent)
     , ui(new Ui::AppLearningUi)
     , learner(nullptr) {
-    Logger::trace("AppLearningUi()>");
+    Logger::trace(std::string("AppLearningUi()>"));
 
     ui->setupUi(this);
 
     learner = new AppLearning(this);
     learner->startWorker();
 
-    Logger::trace("AppLearningUi()<");
+    Logger::trace(std::string("AppLearningUi()<"));
 }
 
 void AppLearningUi::paintEvent(QPaintEvent * e) {
@@ -29,6 +27,6 @@ void AppLearningUi::paintEvent(QPaintEvent * e) {
 }
 
 AppLearningUi::~AppLearningUi() {
-    Logger::trace("~AppLearningUi()<");
+    Logger::trace(std::string("~AppLearningUi()<"));
     delete ui;
 }

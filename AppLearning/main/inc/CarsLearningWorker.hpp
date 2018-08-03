@@ -1,15 +1,13 @@
 #pragma once
-
 #include "CoreApp/main/inc/CarMotionHelper.hpp"
-#include "Draw/main/inc/Drawer.hpp"
-#include "Genetic/main/inc/GeneticPopulation.hpp"
 #include "DemoMisc/main/inc/Car.hpp"
 #include "DemoMisc/main/inc/Track.hpp"
+#include "Draw/main/inc/Drawer.hpp"
+#include "Genetic/main/inc/GeneticPopulation.hpp"
 #include "TrackData/main/inc/TrackData.hpp"
-
+#include <QObject>
 #include <QTimer>
 #include <QThread>
-#include <QObject>
 
 class AppLearningUi;
 

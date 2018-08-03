@@ -1,9 +1,9 @@
+#include "AppLearning/main/inc/AppLearningUi.h"
 #include "AppLearning/main/inc/CarsLearningWorker.hpp"
 #include "AppLearning/main/inc/TrackData1.hpp"
 #include "AppLearning/main/inc/TrackData2.hpp"
 #include "AppLearning/main/inc/TrackData3.hpp"
 #include "AppLearning/main/inc/TrackData4.hpp"
-#include "AppLearning/main/inc/AppLearningUi.h"
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDnaNeuralNetwork.hpp"
 #include "Genetic/main/inc/GeneticGeneDouble.hpp"
@@ -264,7 +264,7 @@ void CarsLearningWorker::init() {
     // Random colorMaker = new Random();
     int i = 0;
 
-    for (std::shared_ptr<GeneticIndividual> indiv : population->getListIndividual()) {
+    for (auto indiv : population->getListIndividual()) {
         Car * car = new Car(std::string("Car_") + std::to_string(i++), CAR_SENSOR_TYPE, CAR_RATIO);
         QColor color;
         color.setRgb(static_cast<int>(Misc::random(0.0, 255.0)),

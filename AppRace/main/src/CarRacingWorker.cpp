@@ -44,7 +44,7 @@ void CarRacingWorker::Worker::run(Drawer & drawer) {
 void CarRacingWorker::Worker::startRunning() {
     onRunning = true;
     QTimer::start(CarMotionHelper::WORKER_DELAY_IN_MS);
-    Logger::debug(std::string("startRunning()<"));
+    Logger::trace(std::string("CarRacingWorker::Worker::startRunning()<"));
 }
 
 void CarRacingWorker::Worker::stopRunning() {
@@ -65,9 +65,9 @@ void CarRacingWorker::Worker::displayStatistics(Drawer & drawer) const {
 }
 
 void CarRacingWorker::Worker::doCarRacing(Drawer & drawer) {
-#if 0
-    Logger::debug(std::string("doCarRacing()>"));
-#endif
+
+    Logger::trace(std::string("CarRacingWorker::Worker::doCarRacing()>"));
+
     /* Clear graphics of drawer. */
     drawer.clear();
     /* Some progress informations on screen*/
@@ -154,9 +154,6 @@ void CarRacingWorker::init() {
             new GeneticGeneDouble(-NETWORK_GENE_VALUE_MAX, NETWORK_GENE_VALUE_MAX,
                                   NETWORK_GENE_SIZE);
 
-#if 0
-        Logger::debug(std::string("weights[") + std::to_string(i) + std::string("]: ") + std::to_string(weights->getValue()[i]));
-#endif
         CDouble * weight = new CDouble(weights->getValue()[i]);
         geneDouble->getCode().push_back(weight);
         dnaNetwork->getListGene().push_back(static_cast<GeneticGene *>(geneDouble));
