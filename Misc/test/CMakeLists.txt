@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.6.2)
 project(AppTestMisc)
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
@@ -28,6 +28,6 @@ set(HEADERS
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_executable(AppTestMisc WIN32 ${SOURCES} ${HEADERS})
+add_executable(AppTestMisc ${SOURCES} ${HEADERS})
 target_link_libraries(AppTestMisc Qt5::Widgets)
 

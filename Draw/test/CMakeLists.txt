@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.6.2)
 project(AppTestDraw)
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
@@ -49,6 +49,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
 
-add_executable(AppTestDraw WIN32 ${SOURCES} ${HEADERS} ${UI_GENERATED_HEADERS} ${RESOURCES})
+add_executable(AppTestDraw ${SOURCES} ${HEADERS} ${UI_GENERATED_HEADERS} ${RESOURCES})
 target_link_libraries(AppTestDraw Qt5::Widgets)
 

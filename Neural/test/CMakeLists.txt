@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.6.2)
 project(AppTestNeural)
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE)
 
@@ -69,6 +69,6 @@ set(HEADERS
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_executable(AppTestNeural WIN32 ${SOURCES} ${HEADERS})
+add_executable(AppTestNeural ${SOURCES} ${HEADERS})
 target_link_libraries(AppTestNeural Qt5::Widgets)
 
