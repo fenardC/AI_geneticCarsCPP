@@ -14,9 +14,6 @@ class GeneticIndividual;
 class Misc {
 
     public:
-        static void init(void);
-
-    public:
         static double bound(const double val, const int low, const int high);
 
     public:
@@ -44,4 +41,7 @@ class Misc {
 
     private:
         Misc();
+
+    private:
+        static std::mt19937 initGenerator(bool withSeeding);
 };

@@ -1,15 +1,8 @@
+#include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/Misc.hpp"
+
 #include <map>
 #include <iterator>
-
-Misc::Misc() {
-}
-
-void Misc::init(void) {
-    /* Will be used to obtain a seed for the random number engine. */
-    std::random_device rd;
-    generator = std::mt19937(rd());
-}
 
 double Misc::bound(const double val, const int low, const int high) { /*const*/
     double result = val;
@@ -25,7 +18,7 @@ double Misc::bound(const double val, const int low, const int high) { /*const*/
 }
 
 int Misc::mix(const double min, const double max, const double value) {
-    return (int)(value * (max - min) + min);
+    return static_cast<int>(value * (max - min) + min);
 }
 
 QColor Misc::mix(const int fromRgbMin, const int toRgbMax, const double ratio) {
@@ -69,6 +62,25 @@ Misc::randomInWeightedMap(const std::map<std::shared_ptr<GeneticIndividual>, dou
     return item->first;
 }
 
+Misc::Misc() {
+}
+
+std::mt19937 Misc::initGenerator(bool withSeeding) {
+    std::mt19937 generator(0);
+    Logger::trace(std::string("Misc::initGenerator>()"));
+
+    if (withSeeding) {
+        /* Will be used to obtain a seed for the random number engine. */
+        std::random_device rd;
+        generator = std::mt19937(rd());
+        Logger::info(std::string("Misc::initGenerator(): seeding done."));
+    }
+
+    Logger::trace(std::string("Misc::initGenerator<()"));
+    return generator;
+}
+
+
 /* One single random generator for all random numbers. */
 /* Standard mersenne_twister_engine seeded with rd() */
-std::mt19937 Misc::generator;
+std::mt19937 Misc::generator = Misc::initGenerator(true);

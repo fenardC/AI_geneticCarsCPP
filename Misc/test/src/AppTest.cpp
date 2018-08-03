@@ -1,102 +1,94 @@
-
-
+#include "CObject/main/inc/CDouble.hpp"
+#include "CObject/main/inc/CInteger.hpp"
 #include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
 #include "Misc/main/inc/Misc.hpp"
-#include <ostream>
 
-
-#define assertEquals( string, val, expected, delta ) \
-        if((std::abs((val) - (expected))) > (delta)) { \
-            std::cout << (string) << " " << (val) << " does not match " << (expected) << std::endl; \
-        } \
+#include <memory>
 
 static void testApp() {
-    const double delta = 1E-15;
+
     const double sqrtOf2 = sqrt(2.0);
 
-    Misc::init();
+    const CDouble four(4.0);
+    const CInteger four2(4.0);
+
+    CDouble::assertEquals(std::string("CDouble::equals()"),  four.equals(CDouble(4.0)) ? CDouble(1.0) : CDouble(0.0),
+                          CDouble(1.0));
+
+    /* Equals between CDouble and CInteger is expected to fail in current implementation. */
+    CDouble::assertEquals(std::string("CDouble::equals()"),  four.equals(CInteger(4.0)) ? CDouble(1.0) : CDouble(0.0),
+                          CDouble(1.0));
+
+    /* Equals between CInteger and CDouble is expected to fail in current implementation. */
+    CInteger::assertEquals(std::string("CInteger::equals()"),  four2.equals(CDouble(4.0)) ? CInteger(1.0) : CInteger(0.0),
+                           CInteger(1.0));
 
     {
-        const Vector2D * vector1 = new Vector2D(0.0, 1.0);
-        const Vector2D * vector1Same = new Vector2D(*vector1);
-        Logger::debug(vector1->toString());
-        Logger::debug(vector1Same->toString());
-        assertEquals("Vector2D()", vector1Same->getX(), vector1->getX(), delta);
-        assertEquals("Vector2D()", vector1Same->getY(), vector1->getY(), delta);
-        delete vector1;
-        delete vector1Same;
+        const auto vector1 = std::make_unique<Vector2D>(0.0, 1.0);
+        const auto vector1Same = std::make_unique<Vector2D>(*vector1);
+        Logger::info(vector1->toString());
+        Logger::info(vector1Same->toString());
+        CDouble::assertEquals(std::string("Vector2D()"), CDouble(vector1Same->getX()), CDouble(vector1->getX()));
+        CDouble::assertEquals(std::string("Vector2D()"), CDouble(vector1Same->getY()), CDouble(vector1->getY()));
     }
 
     {
-        const Vector2D * vector1 = new Vector2D(1.0, 1.0);
-        const Vector2D * vector2 = new Vector2D(-1.0, -1.0);
-        const Vector2D * vector12 = Vector2D::add(*vector1, *vector2);
-        assertEquals("add()", vector12->getX(), 0.0, delta);
-        assertEquals("add()", vector12->getY(), 0.0, delta);
-        delete vector1;
-        delete vector2;
-        delete vector12;
+        const auto vector1 = std::make_unique<Vector2D>(1.0, 1.0);
+        const auto vector2 = std::make_unique<Vector2D>(-1.0, -1.0);
+        const auto vector12 = std::unique_ptr<Vector2D>(Vector2D::add(*vector1, *vector2));
+        CDouble::assertEquals(std::string("Vector2D()::add()"), CDouble(vector12->getX()), CDouble(0.0));
+        CDouble::assertEquals(std::string("Vector2D()::add()"), CDouble(vector12->getY()), CDouble(0.0));
     }
 
     {
-        const Vector2D * vector1 = new Vector2D(1.1, 1.1);
-        const Vector2D * vector2 = new Vector2D(1.0, 1.0);
-        const Vector2D * vector12 = Vector2D::substract(*vector1, *vector2);
-        assertEquals("substract()", vector12->getX(), 0.1, delta);
-        assertEquals("substract()", vector12->getY(), 0.1, delta);
-        delete vector1;
-        delete vector2;
-        delete vector12;
+        const auto vector1 = std::make_unique<Vector2D>(1.1, 1.1);
+        const auto vector2 = std::make_unique<Vector2D>(1.0, 1.0);
+        const auto vector12 = std::unique_ptr<Vector2D>(Vector2D::substract(*vector1, *vector2));
+        CDouble::assertEquals(std::string("Vector2D()::substract()"), CDouble(vector12->getX()), CDouble(0.1));
+        CDouble::assertEquals(std::string("Vector2D()::substract()"), CDouble(vector12->getY()), CDouble(0.1));
     }
 
     {
-        const Vector2D * vector1 = new Vector2D(0.0, 1.0);
-        const Vector2D * vector1Same = Vector2D::getVector2DFromValueAngle(1.0, 90.0);
-        assertEquals("getVector2DFromValueAngle()", vector1Same->getX(), vector1->getX(), delta);
-        assertEquals("getVector2DFromValueAngle()", vector1Same->getY(), vector1->getY(), delta);
+        const auto vector1 = std::make_unique<Vector2D>(0.0, 1.0);
+        const auto vector1Same = std::unique_ptr<Vector2D>(Vector2D::getVector2DFromValueAngle(1.0, 90.0));
+        CDouble::assertEquals(std::string("Vector2D()::getVector2DFromValueAngle()"),
+                              CDouble(vector1Same->getX()), CDouble(vector1->getX()));
+        CDouble::assertEquals(std::string("Vector2D()::getVector2DFromValueAngle()"),
+                              CDouble(vector1Same->getY()), CDouble(vector1->getY()));
         const double v1Orientation = vector1->getOrientation();
-        assertEquals("getOrientation()", v1Orientation, 90.0, delta);
-        delete vector1;
-        delete vector1Same;
+        CDouble::assertEquals(std::string("Vector2D()::getOrientation()"), CDouble(v1Orientation), CDouble(90.0));
     }
 
     {
-        const Vector2D * vector1 = new Vector2D(0.0, 4.0);
-        const Vector2D * vector1Normalized = Vector2D::normalize(*vector1);
-        assertEquals("normalize()", vector1Normalized->getX(), 0.0, delta);
-        assertEquals("normalize()", vector1Normalized->getY(), 1.0, delta);
+        const auto vector1 = std::make_unique<Vector2D>(0.0, 4.0);
+        const auto vector1Normalized = std::unique_ptr<Vector2D>(Vector2D::normalize(*vector1));
+        CDouble::assertEquals(std::string("Vector2D()::normalize()"), CDouble(vector1Normalized->getX()), CDouble(0.0));
+        CDouble::assertEquals(std::string("Vector2D()::normalize()"), CDouble(vector1Normalized->getY()), CDouble(1.0));
 
         const double len = vector1->length();
-        assertEquals("length()", len, 4.0, delta);
+        CDouble::assertEquals(std::string("Vector2D()::length()"), CDouble(len), CDouble(4.0));
 
         const double lenSquared = vector1->lengthSquared();
-        assertEquals("lengthSquared()", lenSquared, 16.0, delta);
-        delete vector1;
-        delete vector1Normalized;
+        CDouble::assertEquals(std::string("Vector2D()::lengthSquared()"), CDouble(lenSquared), CDouble(16.0));
     }
 
     {
-        const Vector2D * vector1 = new Vector2D(0.0, 2.0);
-        const Vector2D * vector1Rotated = Vector2D::rotate(*vector1, 45.0);
-        assertEquals("rotate()", vector1Rotated->getX(), -sqrtOf2, delta);
-        assertEquals("rotate()", vector1Rotated->getY(), sqrtOf2, delta);
-        delete vector1;
-        delete vector1Rotated;
+        const auto vector1 = std::make_unique<Vector2D>(0.0, 2.0);
+        const auto vector1Rotated = std::unique_ptr<Vector2D>(Vector2D::rotate(*vector1, 45.0));
+        CDouble::assertEquals(std::string("Vector2D()::rotate()"), CDouble(vector1Rotated->getX()), CDouble(-sqrtOf2));
+        CDouble::assertEquals(std::string("Vector2D()::rotate()"), CDouble(vector1Rotated->getY()), CDouble(sqrtOf2));
     }
 
     {
-        const Vector2D * vector1 = new Vector2D(2.0, 2.0);
-        const Vector2D * vector1Multiplied = vector1->multiply(0.5);
-        assertEquals("multiply()", vector1Multiplied->getX(), 1.0, delta);
-        assertEquals("multiply()", vector1Multiplied->getY(), 1.0, delta);
+        const auto vector1 = std::make_unique<Vector2D>(2.0, 2.0);
+        const auto vector1Multiplied = std::unique_ptr<Vector2D>(vector1->multiply(0.5));
+        CDouble::assertEquals(std::string("Vector2D()::multiply()"), CDouble(vector1Multiplied->getX()), CDouble(1.0));
+        CDouble::assertEquals(std::string("Vector2D()::multiply()"), CDouble(vector1Multiplied->getY()), CDouble(1.0));
 
-        const Vector2D * vector1Multipli2ed = vector1->multiply2(0.5);
-        assertEquals("multiply2()", vector1Multipli2ed->getX(), 1.0, delta);
-        assertEquals("multiply2()", vector1Multipli2ed->getY(), 1.0, delta);
-        delete vector1;
-        delete vector1Multiplied;
-        delete vector1Multipli2ed;
+        const auto vector1Multipli2ed = std::unique_ptr<Vector2D>(vector1->multiply2(0.5));
+        CDouble::assertEquals(std::string("Vector2D()::multiply2()"), CDouble(vector1Multipli2ed->getX()), CDouble(1.0));
+        CDouble::assertEquals(std::string("Vector2D()::multiply2()"), CDouble(vector1Multipli2ed->getY()), CDouble(1.0));
     }
 
     {
@@ -119,6 +111,7 @@ static void testApp() {
             std::cout << std::string("Misc::random(int, int) returned: ") + std::to_string(res) << std::endl;
         }
     }
+
 }
 
 int main() {

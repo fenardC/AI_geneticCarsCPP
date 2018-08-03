@@ -27,8 +27,6 @@
 static void testApp() {
     const double delta = 1E-15;
 
-    Misc::init();
-
     {
         Logger::info(std::string("-------------------------"));
 

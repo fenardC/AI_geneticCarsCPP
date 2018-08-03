@@ -19,7 +19,6 @@ static const int NETWORK_GENE_SIZE = 1;
 static const int NETWORK_GENE_NUMBER = NETWORK_NUMBER_OF_NEURONS * (SENSOR_LINE_NUMBER + 1 + 1);
 
 static void testApp() {
-    Misc::init();
 
     {
         const auto geneDouble = std::make_unique<GeneticGeneDouble>(-NETWORK_GENE_VALUE_MAX, NETWORK_GENE_VALUE_MAX, 10);

@@ -14,7 +14,11 @@ Vector2D::Vector2D(const double valueX, const double valueY)
 }
 
 Vector2D::Vector2D(const Vector2D & other)
-    : Vector2D(other.x, other.y) {
+    : x(other.x)
+    , y(other.y) {
+    if (Vector2D::DEBUG_ENABLED) {
+        Logger::debug(toString());
+    }
 }
 
 Vector2D::~Vector2D() {
