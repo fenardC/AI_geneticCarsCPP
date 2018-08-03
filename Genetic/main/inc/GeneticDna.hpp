@@ -1,15 +1,15 @@
 #pragma once
-
-#include <iostream>
-#include <typeinfo>
-
 #include "CObject/main/inc/CObject.hpp"
+#include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/Couple.hpp"
+#include <string>
+#include <typeinfo>
 
 class GeneticDna : public CObject {
 
     public:
         virtual ~GeneticDna() {
+            Logger::trace(std::string("GeneticDna::~GeneticDna()<"));
         }
 
     public:
@@ -48,5 +48,5 @@ class GeneticDna : public CObject {
         virtual GeneticDna * randomDna(int size) = 0;
 
     public:
-        std::string toString() const override = 0;
+        virtual std::string toString() const override = 0;
 };

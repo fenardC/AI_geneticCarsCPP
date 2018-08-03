@@ -1,9 +1,8 @@
 #pragma once
-
-#include <vector>
 #include "Genetic/main/inc/GeneticDna.hpp"
 #include "Genetic/main/inc/GeneticGene.hpp"
 #include "Misc/main/inc/Couple.hpp"
+#include <vector>
 
 class GeneticDnaList: public GeneticDna {
 
@@ -14,18 +13,17 @@ class GeneticDnaList: public GeneticDna {
         virtual ~GeneticDnaList();
 
     public:
-        GeneticDna * clone() /*const*/ override;
+        GeneticDnaList * clone() /*const*/ override;
 
     public:
-        Couple<GeneticDna *, GeneticDna *> * cross(GeneticDna & other) override;
+        Couple<GeneticDna *, GeneticDna *> * cross(GeneticDna & other) final override;
 
     public:
         void destroy() override;
 
     public:
-        virtual bool equals(const CObject & other) const override {
-            return false;
-        }
+        /*virtual*/
+        bool equals(const CObject & other) const final override;
 
     public:
         CObject * getCode() const override {

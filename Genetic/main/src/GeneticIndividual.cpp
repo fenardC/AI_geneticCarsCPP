@@ -1,13 +1,12 @@
-#include "Genetic/main/inc/GeneticIndividual.hpp"
-
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDna.hpp"
+#include "Genetic/main/inc/GeneticIndividual.hpp"
 #include <sstream>
 
 GeneticIndividual::GeneticIndividual(GeneticDna * const dna)
-    : score(0)
-    , bloodline(false)
+    : bloodline(false)
     , dna(dna)
+    , score(0)
     , tag(nullptr) {
     {
         std::ostringstream address;
@@ -16,10 +15,10 @@ GeneticIndividual::GeneticIndividual(GeneticDna * const dna)
     }
 }
 
-GeneticIndividual::GeneticIndividual(std::shared_ptr<GeneticIndividual> const indiv)
-    : score(indiv->score)
-    , bloodline(false)
+GeneticIndividual::GeneticIndividual(std::shared_ptr<GeneticIndividual> indiv)
+    : bloodline(false)
     , dna(indiv->dna->clone())
+    , score(indiv->score)
     , tag(indiv->tag) {
     {
         std::ostringstream address;
@@ -29,23 +28,8 @@ GeneticIndividual::GeneticIndividual(std::shared_ptr<GeneticIndividual> const in
 }
 
 GeneticIndividual::~GeneticIndividual() {
-
-    {
-        std::ostringstream address;
-        address << static_cast<void const *>(dna);
-        Logger::trace("GeneticIndividual::~GeneticIndividual(): dna: " + address.str());
-#if 0
-        delete dna;
-#endif
-    }
-#if 0
-    {
-        std::ostringstream address;
-        address << static_cast<void const *>(tag);
-        Logger::trace("GeneticIndividual::~GeneticIndividual(): tag: " + address.str());
-        delete tag;
-    }
-#endif
+    /* It is not responsibility of this to delete the dna that was given at construction. */
+    Logger::trace("GeneticIndividual::~GeneticIndividual()<");
 }
 
 void GeneticIndividual::destroy() {
@@ -87,9 +71,13 @@ void GeneticIndividual::setTag(CObject * const tag) {
 
 std::string GeneticIndividual::toString() const {
     std::stringstream result;
-    result << std::string("DNA : ");
-    result << dna->toString();
-    result << "\nScore : ";
-    result << std::to_string(score);
+
+    if (nullptr != dna) {
+        result << std::string("DNA : ");
+        result << dna->toString();
+        result << "\nScore : ";
+        result << std::to_string(score);
+    }
+
     return result.str();
 }

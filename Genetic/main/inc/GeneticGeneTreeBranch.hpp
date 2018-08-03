@@ -1,9 +1,7 @@
 #pragma once
-
-#include <vector>
-
 #include "Genetic/main/inc/GeneticGeneObject.hpp"
 #include "Misc/main/inc/Misc.hpp"
+#include <vector>
 
 class GeneticGeneTreeBranch : public GeneticGeneObject {
     public:
@@ -32,7 +30,6 @@ class GeneticGeneTreeBranch : public GeneticGeneObject {
 
     public:
         GeneticGeneTreeBranch * getParent() const;
-
 
     public:
         void setParent(GeneticGeneTreeBranch * const parent);

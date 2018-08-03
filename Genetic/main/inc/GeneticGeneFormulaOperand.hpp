@@ -1,5 +1,6 @@
 #pragma once
 #include "CObject/main/inc/CInteger.hpp"
+#include "CObject/main/inc/CString.hpp"
 #include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
 #include <map>
 #include <vector>
@@ -13,10 +14,19 @@ class GeneticGeneFormulaOperand final : public GeneticGeneTreeBranch {
         virtual ~GeneticGeneFormulaOperand();
 
     public:
+        static void addOperator(CString ope, CInteger nbOperand);
+
+    public:
+        static void addOperand(CInteger operand);
+
+    public:
         GeneticGeneFormulaOperand * clone() /*const*/ override;
 
     public:
         bool equals(const GeneticGene & other) const override;
+
+    public:
+        static CInteger getNbOperandForOperator(CString ope);
 
     public:
         bool isOperator() const;
@@ -30,21 +40,12 @@ class GeneticGeneFormulaOperand final : public GeneticGeneTreeBranch {
     public:
         void repareGene();
 
-    public:
-        static CInteger getNbOperandForOperator(std::string ope);
-
-    public:
-        static void addOperator(std::string ope, CInteger nbOperand);
-
-    public:
-        static void addOperand(CInteger operand);
-
     protected:
         static std::vector<CInteger> listOperandPossible;
 
     protected:
-        static std::vector<std::string> listOperatorPossible;
+        static std::vector<CString> listOperatorPossible;
 
     protected:
-        static std::map<std::string, CInteger> mapNbOperand;
+        static std::map<CString, CInteger, CString::Compare> mapNbOperand;
 };

@@ -1,27 +1,34 @@
-
-#include <sstream>
-#include <vector>
-
 #include "CObject/main/inc/CDouble.hpp"
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticGeneDouble.hpp"
 #include "Genetic/main/inc/GeneticDnaTree.hpp"
 #include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
 #include "Misc/main/inc/Misc.hpp"
+#include <sstream>
+#include <vector>
 
 GeneticGeneDouble::GeneticGeneDouble(double min, double max)
-    : ::GeneticGeneDouble(min, max, 1) {
+    : code()
+    , max(max)
+    , min(min)
+    , size(1) {
 }
 
 GeneticGeneDouble::GeneticGeneDouble(double min, double max, int size)
     : code()
-    , size(size)
+    , max(max)
     , min(min)
-    , max(max) {
+    , size(size) {
 }
 
 GeneticGeneDouble::~GeneticGeneDouble() {
+    std::ostringstream address;
+    address << static_cast<void const *>(this);
+    Logger::trace("GeneticGeneDouble::~GeneticGeneDouble(): " + address.str());
+
     destroy();
+
+    Logger::trace("GeneticGeneDouble::~GeneticGeneDouble()<");
 }
 
 GeneticGene * GeneticGeneDouble::clone() {
@@ -35,7 +42,7 @@ GeneticGene * GeneticGeneDouble::clone() {
 }
 
 void GeneticGeneDouble::destroy() {
-    Logger::debug("GeneticGeneDouble::destroy()>");
+    Logger::trace("GeneticGeneDouble::destroy()>");
 
     auto deleteObject = [](CObject * p) {
         std::ostringstream address;
@@ -43,28 +50,37 @@ void GeneticGeneDouble::destroy() {
         Logger::debug("GeneticGeneDouble()::destroy(): objects: " + address.str());
         delete p;
     };
-    //std::for_each(code.begin(), code.end(), deleteObject);
-#warning to be done
+    std::for_each(code.begin(), code.end(), deleteObject);
     code.clear();
-    Logger::debug("GeneticGeneDouble::destroy()<");
+
+    Logger::trace("GeneticGeneDouble::destroy()<");
 }
 
 bool GeneticGeneDouble::equals(const GeneticGene & other) const {
-    const GeneticGeneDouble  & myOther = const_cast<GeneticGeneDouble &>(dynamic_cast<const GeneticGeneDouble & >(other));
-    const size_t size = code.size();
-    const size_t myOtherSize = myOther.code.size();
+    bool result = false;
 
-    if (size == myOtherSize) {
-        for (size_t i = 0; i < size; i++) {
-            if (code[i] != (myOther.code[i])) {
-                return false;
+    try {
+        const GeneticGeneDouble & myOther = const_cast<GeneticGeneDouble &>(dynamic_cast<const GeneticGeneDouble & >(other));
+        const size_t size = code.size();
+        const size_t myOtherSize = myOther.code.size();
+
+        if (size == myOtherSize) {
+            result = true;
+
+            for (size_t i = 0; i < size; i++) {
+                if (!code[i]->equals(*myOther.code[i])) {
+                    result = false;
+                    break;
+                }
             }
-        }
 
-        return true;
+        }
+    }
+    catch (const std::bad_cast & e) {
+        Logger::error(std::string("GeneticGeneDouble::equals(): ") + std::string(e.what()));
     }
 
-    return false;
+    return result;
 }
 
 std::vector<CObject *> & GeneticGeneDouble::getCode() {
@@ -86,7 +102,8 @@ void GeneticGeneDouble::mutate() {
 }
 
 GeneticGeneDouble * GeneticGeneDouble::randomGene() {
-    code.clear();
+    /* Delete previous codes if any. */
+    destroy();
 
     for (int i = 0 ; i < size ; i++) {
         CDouble * random = new CDouble(Misc::random(min, max));

@@ -1,10 +1,10 @@
-
+#include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDnaListObject.hpp"
 #include "Genetic/main/inc/GeneticGeneObject.hpp"
 
 GeneticDnaListObject::GeneticDnaListObject()
-    : listPossible()
-    , geneSize(0)
+    : geneSize(0)
+    , listPossible()
     , nbGene(0) {
 }
 
@@ -14,8 +14,8 @@ GeneticDnaListObject::GeneticDnaListObject(const std::vector<CObject *> & listPo
 }
 
 GeneticDnaListObject::GeneticDnaListObject(const std::vector<CObject *> & listPossible, int geneSize, int nbGene)
-    : listPossible()
-    , geneSize(geneSize)
+    : geneSize(geneSize)
+    , listPossible()
     , nbGene(nbGene) {
     for (CObject * const o : listPossible) {
         this->listPossible.push_back(o);
@@ -23,6 +23,7 @@ GeneticDnaListObject::GeneticDnaListObject(const std::vector<CObject *> & listPo
 }
 
 GeneticDnaListObject::~GeneticDnaListObject() {
+    Logger::trace(std::string("GeneticDnaListObject::~GeneticDnaListObject()<"));
 }
 
 GeneticDnaListObject * GeneticDnaListObject::clone() { /*const*/
@@ -38,6 +39,7 @@ GeneticDnaListObject * GeneticDnaListObject::clone() { /*const*/
 void GeneticDnaListObject::destroy() {
     GeneticDnaList::destroy();
     listPossible.clear();
+    Logger::trace(std::string("GeneticDnaListObject::destroy() < "));
 }
 
 std::vector<CObject *> GeneticDnaListObject::getListPossible() const {

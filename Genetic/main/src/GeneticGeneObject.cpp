@@ -1,18 +1,17 @@
-
+#include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticGeneObject.hpp"
 #include "Misc/main/inc/Misc.hpp"
-
 #include <sstream>
 
 GeneticGeneObject::GeneticGeneObject(std::vector<CObject *> & listPossible)
-    : listPossible(listPossible)
-    , code()
+    : code()
+    , listPossible(listPossible)
     , size(1) {
 }
 
 GeneticGeneObject::GeneticGeneObject(std::vector<CObject *> & listPossible, int size)
-    : listPossible(listPossible)
-    , code()
+    : code()
+    , listPossible(listPossible)
     , size(size) {
 }
 
@@ -22,36 +21,43 @@ GeneticGeneObject::~GeneticGeneObject() {
 GeneticGene * GeneticGeneObject::clone() {
     GeneticGeneObject * geneObject = new GeneticGeneObject(listPossible, size);
 
-    for (CObject * d : code) {
-        geneObject->code.push_back(d);
+    for (CObject * o : code) {
+        geneObject->code.push_back(o);
     }
 
     return geneObject;
 }
 
 void GeneticGeneObject::destroy() {
-    listPossible.clear();
     code.clear();
+    listPossible.clear();
+    Logger::trace("GeneticGeneObject::destroy()<");
 }
 
 bool GeneticGeneObject::equals(const GeneticGene & other) const {
-    const GeneticGeneObject & myOther = const_cast<GeneticGeneObject &>(dynamic_cast<const GeneticGeneObject &>(other));
+    bool result = false;
 
-#warning to be finished
-#if 0
+    try {
+        const GeneticGeneObject & myOther = const_cast<GeneticGeneObject &>(dynamic_cast<const GeneticGeneObject &>(other));
+        const size_t size = code.size();
+        const size_t myOtherSize = myOther.code.size();
 
-    if (getCode().size() == myOther.getCode().size()) {
-        for (size_t i = 0; i < getCode().size(); i++) {
-            if (getCode()[i] != (myOther.getCode()[i])) {
-                return false;
+        if (size == myOtherSize) {
+            result = true;
+
+            for (size_t i = 0; i < size; i++) {
+                if (code[i] != (myOther.code[i])) {
+                    result = false;
+                    break;
+                }
             }
         }
-
-        return true;
+    }
+    catch (const std::bad_cast & e) {
+        Logger::error(std::string("GeneticGeneObject::equals(): ") + std::string(e.what()));
     }
 
-#endif
-    return false;
+    return result;
 }
 
 
@@ -59,17 +65,16 @@ std::vector<CObject *> & GeneticGeneObject::getCode() {
     return code;
 }
 
-std::vector<CObject *> & GeneticGeneObject::getValue() {
-    return code;
-}
-
 std::vector<CObject *> GeneticGeneObject::getListPossible() {
     return listPossible;
 }
 
+std::vector<CObject *> & GeneticGeneObject::getValue() {
+    return code;
+}
+
 void GeneticGeneObject::mutate() {
     int i = 0;
-
     std::vector<CObject *> oldCode(code);
 
     while (i < 30 && std::equal(oldCode.begin(), oldCode.end(), code.begin())) {
@@ -95,15 +100,15 @@ void GeneticGeneObject::setListPossible(std::vector<CObject *> & listPossible) {
 }
 
 std::string GeneticGeneObject::toString() const {
-    std::stringstream stringStream;
+    std::stringstream result;
 
     for (size_t i = 0 ; i < code.size() ; i++) {
         if (i > 0) {
-            stringStream << ", ";
+            result << ", ";
         }
 
-        stringStream << code[i];
+        result << code[i]->toString();
     }
 
-    return stringStream.str();
+    return result.str();
 }

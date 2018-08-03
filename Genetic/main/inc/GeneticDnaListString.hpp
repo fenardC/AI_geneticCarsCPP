@@ -1,7 +1,6 @@
 #pragma once
-
-#include <string>
 #include "Genetic/main/inc/GeneticDnaListObject.hpp"
+#include <string>
 
 class GeneticDnaListString final : public GeneticDnaListObject {
     public:

@@ -1,36 +1,38 @@
-
-#include <sstream>
-#include <typeinfo>
-#include <vector>
-
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDnaList.hpp"
 #include "Genetic/main/inc/GeneticGene.hpp"
 #include "Genetic/main/inc/GeneticCrossParameter.hpp"
 #include "Misc/main/inc/Couple.hpp"
 #include "Misc/main/inc/Misc.hpp"
+#include <sstream>
+#include <typeinfo>
+#include <vector>
 
 GeneticDnaList::GeneticDnaList()
     : listGene() {
 }
 
 GeneticDnaList::~GeneticDnaList() {
+    Logger::trace(std::string("GeneticDnaList::~GeneticDnaList()>"));
+
     {
         auto deleteGene = [](const GeneticGene * p) {
             std::ostringstream address;
             address << static_cast<void const *>(p);
-            Logger::debug("~GeneticDnaList(): genetic gene: " + address.str());
+            Logger::trace(std::string("GeneticDnaList::~GeneticDnaList(): genetic gene: ") + address.str());
             delete p;
         };
-//        std::for_each(listGene.begin(), listGene.end(), deleteGene);
-//        listGene.clear();
+        std::for_each(listGene.begin(), listGene.end(), deleteGene);
+        listGene.clear();
     }
+
+    Logger::trace(std::string("GeneticDnaList::~GeneticDnaList()<"));
 }
 
-GeneticDna * GeneticDnaList::clone() { /*const*/
+GeneticDnaList * GeneticDnaList::clone() { /*const*/
     GeneticDnaList * dna = new GeneticDnaList();
 
-    for (GeneticGene * const gene : GeneticDnaList::listGene) {
+    for (const auto gene : GeneticDnaList::listGene) {
         dna->getListGene().push_back(gene->clone());
     }
 
@@ -39,7 +41,7 @@ GeneticDna * GeneticDnaList::clone() { /*const*/
 
 Couple<GeneticDna *, GeneticDna *> * GeneticDnaList::cross(GeneticDna & other) {
     Couple<GeneticDna *, GeneticDna *> * couple(nullptr);
-    //Logger::debug("GeneticDnaList::cross()>");
+    Logger::trace(std::string("GeneticDnaList::cross()>"));
 
     try {
         GeneticDnaList & b = dynamic_cast<GeneticDnaList &>(other);
@@ -108,19 +110,47 @@ Couple<GeneticDna *, GeneticDna *> * GeneticDnaList::cross(GeneticDna & other) {
         couple = new Couple<GeneticDna *, GeneticDna *>(static_cast<GeneticDna *>(dnaChildA), static_cast<GeneticDna *>(dnaChildB));
     }
     catch (std::bad_cast & exp)   {
-        Logger::debug(std::string("GeneticDnaList::cross(): ") + std::string(exp.what()));
+        Logger::error(std::string("GeneticDnaList::cross(): ") + std::string(exp.what()));
     }
 
     return couple;
 }
 
 void GeneticDnaList::destroy() {
-    for (GeneticGene * gene : listGene) {
+    Logger::trace(std::string("GeneticDnaList::destroy()>"));
+
+    for (auto * const gene : listGene) {
         gene->destroy();
     }
 
     listGene.clear();
-    Logger::debug("GeneticDnaList::destroy()<");
+    Logger::trace(std::string("GeneticDnaList::destroy()<"));
+}
+
+bool GeneticDnaList::equals(const CObject & other) const {
+    bool result = false;
+
+    try {
+        const GeneticDnaList & myOther = const_cast<GeneticDnaList &>(dynamic_cast<const GeneticDnaList & >(other));
+        const size_t size = listGene.size();
+        const size_t myOtherSize = myOther.listGene.size();
+
+        if (size == myOtherSize) {
+            result = true;
+
+            for (size_t i = 0; i < size; i++) {
+                if (listGene[i] != (myOther.listGene[i])) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+    }
+    catch (const std::bad_cast & e) {
+        Logger::error(std::string("GeneticDnaList::equals(): ") + std::string(e.what()));
+    }
+
+    return result;
 }
 
 #warning to be fixed
@@ -160,7 +190,7 @@ double GeneticDnaList::getSimilarityPercent(GeneticDna & other) {
         }
     }
     catch (std::bad_cast & exp)   {
-        Logger::debug(std::string("GeneticDnaList::getSimilarityPercent(): ") + std::string(exp.what()));
+        Logger::error(std::string("GeneticDnaList::getSimilarityPercent(): ") + std::string(exp.what()));
     }
 
     return percent;

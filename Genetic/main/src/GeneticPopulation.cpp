@@ -1,36 +1,103 @@
-#include <map>
-#include <utility>
-#include <vector>
-#include <algorithm>
-
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDna.hpp"
 #include "Genetic/main/inc/GeneticIndividual.hpp"
 #include "Genetic/main/inc/GeneticPopulation.hpp"
 #include "Misc/main/inc/Couple.hpp"
 #include "Misc/main/inc/Misc.hpp"
-
+#include <algorithm>
+#include <map>
+#include <utility>
+#include <vector>
 
 GeneticPopulation::GeneticPopulation()
-    : mapScore()
-    , listSelection()
-    , populationGoal(0)
-    , dnaType(nullptr)
-    , mutantPercentChance(50)
-    , mutationPercentChancePerGene(50.0)
-    , selectionPercent(50.0)
-    , newbePercent(5.0)
-    , nbBloodline(0)
-    , bloodlineScoreTolerance(0.0)
-    , bloodlineDnaMinimumDifference(0.0)
-    , bestWeight(5.0)
-    , listBloodline()
-    , averageScore(0.0)
+    : averageScore(0.0)
     , averageScoreBloodline(0.0)
     , bestScoreInLastGeneration(-1000000000.0)
     , bestScoreEver(-1000000000.0)
+    , bestWeight(5.0)
+    , bloodlineDnaMinimumDifference(0.0)
+    , bloodlineScoreTolerance(0.0)
+    , dnaType(nullptr)
     , generationNumber(1)
+    , listBloodline()
+    , listSelection()
+    , mapScore()
+    , mutantPercentChance(50)
+    , mutationPercentChancePerGene(50.0)
+    , nbBloodline(0)
+    , newbePercent(5.0)
+    , populationGoal(0)
+    , selectionPercent(50.0)
     , bestIndiv(nullptr) {
+}
+
+GeneticPopulation::~GeneticPopulation() {
+    Logger::trace(std::string("GeneticPopulation::~GeneticPopulation()<"));
+}
+
+
+void GeneticPopulation::checkAndApplyMutation(GeneticDna * const dna) {
+    if (Misc::random(mutantPercentChance)) {
+        dna->mutate(mutationPercentChancePerGene);
+    }
+}
+
+void GeneticPopulation::checkBloodline(std::shared_ptr<GeneticIndividual> indiv) {
+    Logger::trace(std::string("GeneticPopulation::checkBloodline()>"));
+
+    if ((nbBloodline > 0) &&
+            ((bestIndiv == nullptr) ||
+             (bestIndiv->getScore() * (1 - bloodlineScoreTolerance / 100.0) <= indiv->getScore()))) {
+
+        std::shared_ptr<GeneticIndividual> lowest = nullptr;
+        size_t lowestIndex = 0;
+
+        if (nbBloodline <= listBloodline.size()) {
+            for (lowestIndex = 0 ; lowestIndex < listBloodline.size() ; lowestIndex++) {
+                if (lowest == nullptr || lowest->getScore() > listBloodline[lowestIndex]->getScore()) {
+                    lowest = listBloodline[lowestIndex];
+                }
+            }
+
+            if (lowest != nullptr && lowest->getScore() >= indiv->getScore()) {
+                return;
+            }
+        }
+
+        bool ok = true;
+        std::vector<std::shared_ptr<GeneticIndividual>> listSimi;
+
+        for (size_t i = 0 ; i < listBloodline.size() ; i++) {
+            if (bloodlineDnaMinimumDifference > 100 - indiv->getDna()->getSimilarityPercent(*listBloodline[i]->getDna())) {
+                /* Too much similarity */
+                if (listBloodline[i]->getScore() < indiv->getScore()) {
+                    listSimi.push_back(listBloodline[i]);
+                }
+                else {
+                    return;
+                }
+            }
+        }
+
+        if (ok) {
+            if (!listSimi.empty()) {
+                for (std::shared_ptr<GeneticIndividual> simi : listSimi) {
+                    listBloodline.erase(std::remove(listBloodline.begin(), listBloodline.end(), simi), listBloodline.end());
+                }
+
+                listBloodline.push_back(indiv);
+            }
+            else {
+                if (nbBloodline <= listBloodline.size()) {
+                    listBloodline.erase(listBloodline.begin() + lowestIndex);
+                }
+
+                listBloodline.push_back(indiv);
+            }
+        }
+    }
+
+    Logger::trace(std::string("GeneticPopulation::checkBloodline()<"));
 }
 
 void GeneticPopulation::generatePopulation(unsigned int number, GeneticDna * dnaType) {
@@ -43,11 +110,91 @@ void GeneticPopulation::generatePopulation(unsigned int number, GeneticDna * dna
 }
 
 void GeneticPopulation::generateRandomIndividual() {
-    Logger::trace(std::string("GeneticPopulation::generateRandomIndividual()>"));
+    Logger::trace(std::string(std::string("GeneticPopulation::generateRandomIndividual()>")));
 
     auto indiv = std::make_shared<GeneticIndividual>(dnaType->clone());
     indiv->getDna()->randomDna(dnaType->getLength());
     listIndividual.push_back(indiv);
+}
+
+double GeneticPopulation::getAverageScore() const {
+    return averageScore;
+}
+
+double GeneticPopulation::getAverageScoreBloodline() const {
+    return averageScoreBloodline;
+}
+
+std::shared_ptr<GeneticIndividual> GeneticPopulation::getBestIndiv() {
+    return bestIndiv;
+}
+
+double GeneticPopulation::getBestScoreEver() const {
+    return bestScoreEver;
+}
+
+double GeneticPopulation::getBestScoreInLastGeneration() const {
+    return bestScoreInLastGeneration;
+}
+
+double GeneticPopulation::getBestWeight() const {
+    return bestWeight;
+}
+
+double GeneticPopulation::getBloodlineDnaMinimumDifference() const {
+    return bloodlineDnaMinimumDifference;
+}
+
+double GeneticPopulation::getBloodlineScoreTolerance() const {
+    return bloodlineScoreTolerance;
+}
+
+GeneticDna * GeneticPopulation::getDnaType() {
+    return dnaType;
+}
+
+int GeneticPopulation::getGenerationNumber() const {
+    return generationNumber;
+}
+
+std::vector<std::shared_ptr<GeneticIndividual>> & GeneticPopulation::getListBloodline() {
+    return listBloodline;
+}
+
+std::vector<std::shared_ptr<GeneticIndividual>> & GeneticPopulation::getListIndividual() {
+    return listIndividual;
+}
+
+double GeneticPopulation::getMutantPercentChance() const {
+    return mutantPercentChance;
+}
+
+double GeneticPopulation::getMutationPercentChancePerGene() const {
+    return mutationPercentChancePerGene;
+}
+
+int GeneticPopulation::getNbBloodline() const {
+    return nbBloodline;
+}
+
+double GeneticPopulation::getNewbePercent() const {
+    return newbePercent;
+}
+
+int GeneticPopulation::getPopulationGoal() const {
+    return populationGoal;
+}
+
+double GeneticPopulation::getSelectionPercent() const {
+    return selectionPercent;
+}
+
+void GeneticPopulation::killRandomIndividual() {
+    Logger::trace(std::string("GeneticPopulation::killRandomIndividual()>"));
+
+    const auto iterator = listIndividual.begin() + Misc::random(0, listIndividual.size() - 1);
+    (*iterator)->destroy();
+    listIndividual.erase(iterator);
 }
 
 void GeneticPopulation::proceedEvaluation() {
@@ -90,7 +237,7 @@ void GeneticPopulation::proceedEvaluation() {
 
     if (bestScoreEver < bestScoreInLastGeneration) {
         bestScoreEver = bestScoreInLastGeneration;
-        bestIndiv = std::make_shared<GeneticIndividual>(bestIndivGen);
+        bestIndiv = bestIndivGen;
     }
 
     /* Adds new bloodlines */
@@ -109,7 +256,6 @@ void GeneticPopulation::proceedEvaluation() {
 
         oneBloodLine++;
     }
-
 
     /* Removes if too much bloodlines */
     int nbDelete = listBloodline.size() - nbBloodline;
@@ -132,8 +278,8 @@ void GeneticPopulation::proceedEvaluation() {
         averageScoreBloodline = 0;
     }
 
-    Logger::trace(std::string("GeneticPopulation::proceedEvaluation(): averageScoreBloodline : ")
-                  + std::to_string(averageScoreBloodline));
+    Logger::trace(std::string("GeneticPopulation::proceedEvaluation(): averageScoreBloodline : ") +
+                  std::to_string(averageScoreBloodline));
 }
 
 void GeneticPopulation::proceedNextGeneration() {
@@ -147,39 +293,29 @@ void GeneticPopulation::proceedNextGeneration() {
 
     proceedPopulationControl();
     generationNumber++;
+
     Logger::trace(std::string("GeneticPopulation::proceedNextGeneration()<"));
 }
 
-void GeneticPopulation::proceedSelection() {
-    Logger::trace(std::string("GeneticPopulation::proceedSelection()>"));
+void GeneticPopulation::proceedPopulationControl() {
+    Logger::trace(std::string("GeneticPopulation::proceedPopulationControl()>"));
 
-    listSelection.clear();
-    /* Taking X% best */
-    unsigned int nb = static_cast<unsigned int>(std::ceil(populationGoal * (selectionPercent / 100.0)));
-
-    /* std::map is already sorted, so only needed  to traverse the map using a reverse_iterator */
-    auto oneScore = mapScore.rbegin();
-
-    while ((oneScore != mapScore.rend()) && (listSelection.size() < nb)) {
-        std::vector<std::shared_ptr<GeneticIndividual>> listIndiv = oneScore->second;
-
-        size_t i = 0;
-
-        while ((i < listIndiv.size()) && (listSelection.size() < nb)) {
-            listSelection.push_back(listIndiv[i]);
-            i++;
+    if (listIndividual.size() > populationGoal) {
+        for (size_t i = 0 ; i < listIndividual.size() - populationGoal ; i++) {
+            killRandomIndividual();
         }
-
-        /* Go on with lower score. */
-        oneScore++;
+    }
+    else if (listIndividual.size() < populationGoal) {
+        for (size_t i = 0 ; i < populationGoal - listIndividual.size() ; i++) {
+            generateRandomIndividual();
+        }
     }
 
-    Logger::trace(std::string("GeneticPopulation::proceedSelection(): listSelection.size(): ") +
-                  std::to_string(listSelection.size()));
+    Logger::trace(std::string("GeneticPopulation::proceedPopulationControl()<"));
 }
 
 void GeneticPopulation::proceedReproduction() {
-    Logger::trace("GeneticPopulation::proceedReproduction()>");
+    Logger::trace(std::string("GeneticPopulation::proceedReproduction()>"));
 
     auto * map = new std::map<std::shared_ptr<GeneticIndividual>, double>();
     double min = 0;
@@ -239,7 +375,7 @@ void GeneticPopulation::proceedReproduction() {
     }
 
     for (int i = 0 ; i < nbBlood ; i++) {
-        auto indiv = std::make_shared<GeneticIndividual>(listBloodline[i]);
+        auto indiv = listBloodline[i];
         indiv->setBloodline(true);
         listIndividual.push_back(indiv);
     }
@@ -265,30 +401,47 @@ void GeneticPopulation::proceedReproductionBetweenSelectioned() {
     Logger::trace(std::string("GeneticPopulation::proceedReproductionBetweenSelectioned()<"));
 }
 
+void GeneticPopulation::proceedSelection() {
+    Logger::trace(std::string("GeneticPopulation::proceedSelection()>"));
 
-void GeneticPopulation::proceedPopulationControl() {
-    Logger::trace("GeneticPopulation::proceedPopulationControl()>");
+    listSelection.clear();
+    /* Taking X% best */
+    unsigned int nb = static_cast<unsigned int>(std::ceil(populationGoal * (selectionPercent / 100.0)));
 
-    if (listIndividual.size() > populationGoal) {
-        for (size_t i = 0 ; i < listIndividual.size() - populationGoal ; i++) {
-            killRandomIndividual();
+    /* std::map is already sorted, so only needed  to traverse the map using a reverse_iterator */
+    auto oneScore = mapScore.rbegin();
+
+    while ((oneScore != mapScore.rend()) && (listSelection.size() < nb)) {
+        std::vector<std::shared_ptr<GeneticIndividual>> listIndiv = oneScore->second;
+
+        size_t i = 0;
+
+        while ((i < listIndiv.size()) && (listSelection.size() < nb)) {
+            listSelection.push_back(listIndiv[i]);
+            i++;
         }
-    }
-    else if (listIndividual.size() < populationGoal) {
-        for (size_t i = 0 ; i < populationGoal - listIndividual.size() ; i++) {
-            generateRandomIndividual();
-        }
+
+        /* Go on with lower score. */
+        oneScore++;
     }
 
-    Logger::trace("GeneticPopulation::proceedPopulationControl()<");
+    Logger::trace(std::string("GeneticPopulation::proceedSelection(): listSelection.size(): ") +
+                  std::to_string(listSelection.size()));
 }
 
-void GeneticPopulation::killRandomIndividual() {
-    Logger::trace(std::string("GeneticPopulation::killRandomIndividual()> "));
+void GeneticPopulation::removeLowestBloodline() {
+    const GeneticIndividual * lowest = nullptr;
+    size_t lowestIndex = 0;
 
-    const auto iterator = listIndividual.begin() + Misc::random(0, listIndividual.size() - 1);
-    (*iterator)->destroy();
-    listIndividual.erase(iterator);
+    for (lowestIndex = 0 ; lowestIndex < listBloodline.size() ; lowestIndex++) {
+        if (lowest == nullptr || lowest->getScore() > listBloodline[lowestIndex]->getScore()) {
+            lowest = listBloodline[lowestIndex].get();
+        }
+    }
+
+    if (lowest != nullptr) {
+        listBloodline.erase(listBloodline.begin() + lowestIndex);
+    }
 }
 
 void GeneticPopulation::reproduce22(GeneticIndividual & a, GeneticIndividual & b) {
@@ -309,7 +462,7 @@ void GeneticPopulation::reproduce22(GeneticIndividual & a, GeneticIndividual & b
 }
 
 void GeneticPopulation::reproduce21(const GeneticIndividual & a, const GeneticIndividual & b) {
-    Logger::trace("GeneticPopulation::reproduce21()>");
+    Logger::trace(std::string("GeneticPopulation::reproduce21()>"));
 
     if (a.getDna()->isCompatible(*b.getDna())) {
         Couple<GeneticDna *, GeneticDna *> * const couple = a.getDna()->cross(*b.getDna());
@@ -321,197 +474,47 @@ void GeneticPopulation::reproduce21(const GeneticIndividual & a, const GeneticIn
         }
     }
 
-    Logger::trace("GeneticPopulation::reproduce21()<");
+    Logger::trace(std::string("GeneticPopulation::reproduce21()<"));
 }
 
-void GeneticPopulation::checkAndApplyMutation(GeneticDna * dna) {
-    if (Misc::random(mutantPercentChance)) {
-        dna->mutate(mutationPercentChancePerGene);
-    }
-}
-
-void GeneticPopulation::checkBloodline(std::shared_ptr<GeneticIndividual> indiv) {
-    Logger::trace("GeneticPopulation::checkBloodline()>");
-
-    if ((nbBloodline > 0) &&
-            ((bestIndiv == nullptr) ||
-             (bestIndiv->getScore() * (1 - bloodlineScoreTolerance / 100.0) <= indiv->getScore()))) {
-
-        std::shared_ptr<GeneticIndividual> lowest = nullptr;
-        size_t lowestIndex = 0;
-
-        if (nbBloodline <= listBloodline.size()) {
-            for (lowestIndex = 0 ; lowestIndex < listBloodline.size() ; lowestIndex++) {
-                if (lowest == nullptr || lowest->getScore() > listBloodline[lowestIndex]->getScore()) {
-                    lowest = listBloodline[lowestIndex];
-                }
-            }
-
-            if (lowest != nullptr && lowest->getScore() >= indiv->getScore()) {
-                return;
-            }
-        }
-
-        bool ok = true;
-        std::vector<std::shared_ptr<GeneticIndividual>> listSimi;
-
-        for (size_t i = 0 ; i < listBloodline.size() ; i++) {
-            if (bloodlineDnaMinimumDifference > 100 - indiv->getDna()->getSimilarityPercent(*listBloodline[i]->getDna())) {
-                /* Too much similarity */
-                if (listBloodline[i]->getScore() < indiv->getScore()) {
-                    listSimi.push_back(listBloodline[i]);
-                }
-                else {
-                    return;
-                }
-            }
-        }
-
-        if (ok) {
-            if (!listSimi.empty()) {
-                for (std::shared_ptr<GeneticIndividual> simi : listSimi) {
-                    listBloodline.erase(std::remove(listBloodline.begin(), listBloodline.end(), simi), listBloodline.end());
-                }
-
-                listBloodline.push_back(std::make_shared<GeneticIndividual>(indiv));
-            }
-            else {
-                if (nbBloodline <= listBloodline.size()) {
-                    listBloodline.erase(listBloodline.begin() + lowestIndex);
-                }
-
-                listBloodline.push_back(std::make_shared<GeneticIndividual>(indiv));
-            }
-        }
-    }
-
-    Logger::trace("GeneticPopulation::checkBloodline()<");
-}
-
-void GeneticPopulation::removeLowestBloodline() {
-    const GeneticIndividual * lowest = nullptr;
-    size_t lowestIndex = 0;
-
-    for (lowestIndex = 0 ; lowestIndex < listBloodline.size() ; lowestIndex++) {
-        if (lowest == nullptr || lowest->getScore() > listBloodline[lowestIndex]->getScore()) {
-            lowest = listBloodline[lowestIndex].get();
-        }
-    }
-
-    if (lowest != nullptr) {
-        listBloodline.erase(listBloodline.begin() + lowestIndex);
-    }
-}
-
-
-int GeneticPopulation::getPopulationGoal() {
-    return populationGoal;
-}
-
-void GeneticPopulation::setPopulationGoal(int populationGoal) {
-    this->populationGoal = populationGoal;
-}
-
-std::vector<std::shared_ptr<GeneticIndividual>> & GeneticPopulation::getListIndividual() {
-    return listIndividual;
-}
-
-double GeneticPopulation::getAverageScore() {
-    return averageScore;
-}
-
-double GeneticPopulation::getBestScoreInLastGeneration() {
-    return bestScoreInLastGeneration;
-}
-
-double GeneticPopulation::getBestScoreEver() {
-    return bestScoreEver;
-}
-
-int GeneticPopulation::getGenerationNumber() {
-    return generationNumber;
-}
-
-GeneticDna * GeneticPopulation::getDnaType() {
-    return dnaType;
-}
-
-void GeneticPopulation::setDnaType(GeneticDna * dnaType) {
-    this->dnaType = dnaType;
-}
-
-double GeneticPopulation::getMutantPercentChance() {
-    return mutantPercentChance;
-}
-
-void GeneticPopulation::setMutantPercentChance(double mutantPercentChance) {
-    this->mutantPercentChance = mutantPercentChance;
-}
-
-double GeneticPopulation::getMutationPercentChancePerGene() {
-    return mutationPercentChancePerGene;
-}
-
-void GeneticPopulation::setMutationPercentChancePerGene(double mutationPercentChancePerGene) {
-    this->mutationPercentChancePerGene = mutationPercentChancePerGene;
-}
-
-std::shared_ptr<GeneticIndividual> GeneticPopulation::getBestIndiv() {
-    return bestIndiv;
-}
-
-double GeneticPopulation::getNewbePercent() {
-    return newbePercent;
-}
-
-void GeneticPopulation::setNewbePercent(double newbePercent) {
-    this->newbePercent = newbePercent;
-}
-
-int GeneticPopulation::getNbBloodline() {
-    return nbBloodline;
-}
-
-void GeneticPopulation::setNbBloodline(int nbBloodline) {
-    this->nbBloodline = nbBloodline;
-}
-
-double GeneticPopulation::getBloodlineScoreTolerance() {
-    return bloodlineScoreTolerance;
-}
-
-void GeneticPopulation::setBloodlineScoreTolerance(double bloodlineScoreTolerance) {
-    this->bloodlineScoreTolerance = bloodlineScoreTolerance;
-}
-
-double GeneticPopulation::getBloodlineDnaMinimumDifference() {
-    return bloodlineDnaMinimumDifference;
+void GeneticPopulation::setBestWeight(double bestWeight) {
+    this->bestWeight = bestWeight;
 }
 
 void GeneticPopulation::setBloodlineDnaMinimumDifference(double bloodlineDnaMinimumDifference) {
     this->bloodlineDnaMinimumDifference = bloodlineDnaMinimumDifference;
 }
 
-double GeneticPopulation::getSelectionPercent() {
-    return selectionPercent;
+void GeneticPopulation::setBloodlineScoreTolerance(double bloodlineScoreTolerance) {
+    this->bloodlineScoreTolerance = bloodlineScoreTolerance;
+}
+
+void GeneticPopulation::setDnaType(GeneticDna * dnaType) {
+    this->dnaType = dnaType;
+}
+
+void GeneticPopulation::setMutantPercentChance(double mutantPercentChance) {
+
+    this->mutantPercentChance = mutantPercentChance;
+}
+
+void GeneticPopulation::setMutationPercentChancePerGene(double mutationPercentChancePerGene) {
+    this->mutationPercentChancePerGene = mutationPercentChancePerGene;
+}
+
+void GeneticPopulation::setNbBloodline(int nbBloodline) {
+    this->nbBloodline = nbBloodline;
+}
+
+void GeneticPopulation::setNewbePercent(double newbePercent) {
+    this->newbePercent = newbePercent;
+}
+
+void GeneticPopulation::setPopulationGoal(int populationGoal) {
+    this->populationGoal = populationGoal;
 }
 
 void GeneticPopulation::setSelectionPercent(double selectionPercent) {
     this->selectionPercent = selectionPercent;
 }
 
-double GeneticPopulation::getAverageScoreBloodline() {
-    return averageScoreBloodline;
-}
-
-std::vector<std::shared_ptr<GeneticIndividual>> & GeneticPopulation::getListBloodline() {
-    return listBloodline;
-}
-
-double GeneticPopulation::getBestWeight() const {
-    return bestWeight;
-}
-
-void GeneticPopulation::setBestWeight(double bestWeight) {
-    this->bestWeight = bestWeight;
-}

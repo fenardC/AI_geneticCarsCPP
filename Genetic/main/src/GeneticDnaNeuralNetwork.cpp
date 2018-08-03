@@ -10,6 +10,7 @@ GeneticDnaNeuralNetwork::GeneticDnaNeuralNetwork(double min, double max, int gen
 }
 
 GeneticDnaNeuralNetwork::~GeneticDnaNeuralNetwork() {
+    Logger::trace("GeneticDnaNeuralNetwork::~GeneticDnaNeuralNetwork()<");
 }
 
 GeneticDnaNeuralNetwork * GeneticDnaNeuralNetwork::clone() {

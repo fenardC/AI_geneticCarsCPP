@@ -20,22 +20,25 @@ GeneticGene * GeneticGeneString::clone() {
     return gene;
 }
 
+void GeneticGeneString::destroy() {
+#warning to be finished
+    charset = nullptr;
+    //code = nullptr;
+    Logger::trace("GeneticGeneString::destroy()<");
+}
+
 bool GeneticGeneString::equals(const GeneticGene & other) const {
     bool result = false;
 
     try {
         const GeneticGeneString & myOther = dynamic_cast<const GeneticGeneString &>(other);
-#warning to be fixed
-#if 1
 
         if (size == myOther.size) {
-            return 0 == code[0]->equals(*myOther.code[0]);
+            result = code[0]->equals(*myOther.code[0]);
         }
-
-#endif
     }
-    catch (std::bad_cast & e)   {
-        Logger::debug(std::string("GeneticGeneString::equals(): ") + std::string(e.what()));
+    catch (std::bad_cast & e) {
+        Logger::error(std::string("GeneticGeneString::equals(): ") + std::string(e.what()));
     }
 
     return result;
@@ -89,11 +92,6 @@ std::vector<CObject *> & GeneticGeneString::getValue() {
     return code;
 }
 
-void GeneticGeneString::destroy() {
-#warning to be finished
-    charset = nullptr;
-    //code = nullptr;
-}
 
 std::string GeneticGeneString::toString() const {
     return code[0]->toString();

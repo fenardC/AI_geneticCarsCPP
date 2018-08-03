@@ -1,13 +1,11 @@
-
-#include <typeinfo>
-#include <string>
-#include <vector>
-
 #include "Debug/main/inc/Logger.hpp"
 #include "Genetic/main/inc/GeneticDnaTree.hpp"
 #include "Genetic/main/inc/GeneticGene.hpp"
 #include "Genetic/main/inc/GeneticGeneTreeBranch.hpp"
 #include "Misc/main/inc/Misc.hpp"
+#include <typeinfo>
+#include <string>
+#include <vector>
 
 GeneticDnaTree::GeneticDnaTree()
     : listRoot() {
@@ -15,7 +13,7 @@ GeneticDnaTree::GeneticDnaTree()
 }
 
 GeneticDnaTree::~GeneticDnaTree() {
-
+    Logger::trace("GeneticDnaTree::~GeneticDnaTree()<");
 }
 
 GeneticDnaTree * GeneticDnaTree::clone() { /*const*/
@@ -29,7 +27,7 @@ GeneticDnaTree * GeneticDnaTree::clone() { /*const*/
 }
 
 Couple<GeneticDna *, GeneticDna *> * GeneticDnaTree::cross(GeneticDna & other) {
-    Logger::debug("GeneticDnaTree::cross()>");
+    Logger::trace("GeneticDnaTree::cross()>");
 
     Couple<GeneticDna *, GeneticDna *> * couple(nullptr);
 
@@ -97,7 +95,7 @@ Couple<GeneticDna *, GeneticDna *> * GeneticDnaTree::cross(GeneticDna & other) {
         couple = new Couple<GeneticDna *, GeneticDna *>((GeneticDna *)dnaChildA, (GeneticDna *)dnaChildB);
     }
     catch (std::bad_cast & e)   {
-        Logger::debug(std::string("GeneticDnaTree::cross(): ") + std::string(e.what()));
+        Logger::error(std::string("GeneticDnaTree::cross(): ") + std::string(e.what()));
     }
 
     return couple;
@@ -109,7 +107,36 @@ void GeneticDnaTree::destroy() {
     }
 
     listRoot.clear();
+    Logger::trace("GeneticDnaTree::destroy()<");
 }
+
+bool GeneticDnaTree::equals(const CObject & other) const {
+    bool  result = false;
+
+
+    try {
+        const GeneticDnaTree & myOther = const_cast<GeneticDnaTree &>(dynamic_cast<const GeneticDnaTree & >(other));
+        const size_t size = listRoot.size();
+        const size_t myOtherSize = myOther.listRoot.size();
+
+        if (size == myOtherSize) {
+            result = true;
+
+            for (size_t i = 0; i < size; i++) {
+                if (listRoot[i] != (myOther.listRoot[i])) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+    }
+    catch (const std::bad_cast & e) {
+        Logger::error(std::string("GeneticDnaTree::equals(): ") + std::string(e.what()));
+    }
+
+    return result;
+}
+
 #if 0
 std::vector<GeneticGeneTreeBranch *> * GeneticDnaTree::getCode() const {
     return &listRoot;
@@ -185,7 +212,7 @@ double GeneticDnaTree::getSimilarityPercent(GeneticDna & other) {
         }
     }
     catch (std::bad_cast & exp)   {
-        Logger::debug(std::string("GeneticDnaTree::getSimilarityPercent(): ") + std::string(exp.what()));
+        Logger::error(std::string("GeneticDnaTree::getSimilarityPercent(): ") + std::string(exp.what()));
     }
 
     return percent;
@@ -206,7 +233,7 @@ GeneticDnaTree * GeneticDnaTree::randomDna()  {
     return this;
 }
 
-GeneticDnaTree * GeneticDnaTree::randomDna(int size) {
+GeneticDnaTree * GeneticDnaTree::randomDna(int /*size*/) {
     return this;
 }
 

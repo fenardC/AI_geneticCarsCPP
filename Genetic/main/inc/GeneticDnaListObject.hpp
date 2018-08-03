@@ -1,8 +1,6 @@
 #pragma once
-
-#include <vector>
-
 #include "Genetic/main/inc/GeneticDnaList.hpp"
+#include <vector>
 
 class GeneticDnaListObject : public GeneticDnaList {
 
@@ -34,10 +32,10 @@ class GeneticDnaListObject : public GeneticDnaList {
         GeneticDnaListObject * randomDna(int size) override;
 
     private:
-        std::vector<CObject *> listPossible;
+        int geneSize;
 
     private:
-        int geneSize;
+        std::vector<CObject *> listPossible;
 
     private:
         int nbGene;
