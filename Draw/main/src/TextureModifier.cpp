@@ -5,8 +5,8 @@ const int TextureModifier::ANTIALIASING_HIGH = 0 /* = AffineTransformOp.TYPE_BIL
 TextureModifier::TextureModifier()
     : angle(0)
     , antialiasing(TextureModifier::ANTIALIASING_HIGH)
-    , w(0)
-    , h(0)
     , color(QColor(Qt::white))
-    , ratio(1) {
+    , h(0)
+    , ratio(1)
+    , w(0) {
 }

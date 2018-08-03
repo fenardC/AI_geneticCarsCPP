@@ -72,14 +72,14 @@ class TextureModifier {
         int antialiasing;
 
     private:
-        int w;
+        QColor color;
 
     private:
         int h;
 
     private:
-        QColor color;
+        double ratio;
 
     private:
-        double ratio;
+        int w;
 };

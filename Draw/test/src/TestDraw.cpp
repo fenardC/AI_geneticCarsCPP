@@ -1,23 +1,15 @@
+#include "CObject/main/inc/CDouble.hpp"
 #include "Draw/main/inc/Texture.hpp"
 #include "Draw/test/inc/TestDraw.hpp"
 #include "Misc/main/inc/Misc.hpp"
-
-#include <ostream>
-#include <QPainter>
-
-#define assertEquals( string, val, expected, delta ) \
-        if((std::abs((val) - (expected))) > (delta)) { \
-            std::cout << (string) << " " << (val) << " does not match " << (expected) << std::endl; \
-        } \
 
 TestDraw::TestDraw() {
 }
 
 void TestDraw::testDraw(Drawer & drawer) {
-    const double delta = 1E-15;
 
     bool initDone = Texture::init();
-    assertEquals("Texture::init()", initDone ? 1.0 : 0.0, 1.0, delta);
+    CDouble::assertEquals(std::string("Texture::init()"), initDone ? CDouble(1.0) : CDouble(0.0), CDouble(1.0));
 
     TextureModifier * textureModifier = new TextureModifier();
     textureModifier->setCenter(50, 25);

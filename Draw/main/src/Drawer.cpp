@@ -1,7 +1,6 @@
 #include "Draw/main/inc/Drawer.hpp"
 #include "Debug/main/inc/Logger.hpp"
-#include <QPainter>
-#include <QColor>
+
 #include <QBrush>
 #include <QPen>
 
@@ -58,11 +57,15 @@ void Drawer::drawLine(const double posX1, const double posY1,
     painter.drawLine(posX1, posY1, posX2, posY2);
 }
 
-void Drawer::drawPolygon(const int xPoints[], const int yPoints[],
-                         const int pointCount) const {
-    QPoint points[pointCount];
 
-    for (int i(0); i < pointCount; i++) {
+void Drawer::drawPolygon(const int xPoints[], const int yPoints[], int nPoints) const {
+    QPoint points[8];
+
+    if (8 < nPoints) {
+        nPoints = 8;
+    }
+
+    for (int i(0); i < nPoints; i++) {
         points[i].setX(xPoints[i]);
         points[i].setY(yPoints[i]);
     }
@@ -73,7 +76,7 @@ void Drawer::drawPolygon(const int xPoints[], const int yPoints[],
     pen.setStyle(Qt::SolidLine);
     painter.setPen(pen);
 
-    painter.drawPolygon(&points[0], pointCount);
+    painter.drawPolygon(&points[0], nPoints);
 }
 
 void Drawer::drawRect(const double posX, const double posY,
@@ -110,10 +113,14 @@ void Drawer::fillCircle(const double posX, const double posY, const int radius) 
     painter.drawEllipse(posX, posY, radius, radius);
 }
 
-void Drawer::fillPolygon(const int xPoints[], const int yPoints[], const int pointCount) const {
-    QPoint points[pointCount];
+void Drawer::fillPolygon(const int xPoints[], const int yPoints[], int nPoints) const {
+    QPoint points[8];
 
-    for (int i(0); i < pointCount; i++) {
+    if (8 < nPoints) {
+        nPoints = 8;
+    }
+
+    for (int i(0); i < nPoints; i++) {
         points[i].setX(xPoints[i]);
         points[i].setY(yPoints[i]);
     }
@@ -126,7 +133,7 @@ void Drawer::fillPolygon(const int xPoints[], const int yPoints[], const int poi
 
     const QBrush brush(color, Qt::SolidPattern);
     painter.setBrush(brush);
-    painter.drawPolygon(&points[0], pointCount);
+    painter.drawPolygon(&points[0], nPoints);
 }
 
 void Drawer::setColor(const QColor color) {

@@ -1,10 +1,13 @@
 #pragma once
 
-#include <QPainter>
-#include <QColor>
+
 #include <QBrush>
+#include <QColor>
+#include <QImage>
+#include <QPainter>
 #include <QPen>
-#include <QPixmap>
+
+#include <string>
 
 class Drawer {
     public:
@@ -30,7 +33,7 @@ class Drawer {
         void drawLine(const double posX1, const double posY1, const double posX2, const double posY2) const;
 
     public:
-        void drawPolygon(const int xPoints[], const int yPoints[], const int nPoints) const;
+        void drawPolygon(const int xPoints[], const int yPoints[], int nPoints) const;
 
     public:
         void drawRect(const double posX, const double posY, const int width, const int height) const;
@@ -42,7 +45,7 @@ class Drawer {
         void fillCircle(const double posX, const double posY, const int radius) const;
 
     public:
-        void fillPolygon(const int xPoints[], const int yPoints[], const int nPoints) const;
+        void fillPolygon(const int xPoints[], const int yPoints[], int nPoints) const;
 
     public:
         void setColor(const QColor color);

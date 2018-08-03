@@ -5,9 +5,6 @@
 #include <QTransform>
 #include <memory>
 
-Texture::Texture() {
-}
-
 void Texture::deInit() {
     delete image;
     image = nullptr;
@@ -64,9 +61,9 @@ void Texture::draw(Drawer & drawer, const double posX, const double posY,
     }
     else {
         /* Create buffer for rotate operation to come. */
-        QImage imageBuff(image->toImage());
+        QImage imageBuff(*image);
         /* Set some color to the car image. */
-        setcolor(modifier.getColor(), imageBuff);
+        setColor(modifier.getColor(), imageBuff);
 
         /* Construct sequence of transformation to come. */
         QTransform transformer;
@@ -88,7 +85,7 @@ bool Texture::init() {
     bool result = true;
 
     if (!initDone && !DEBUG_ENABLED) {
-        image = new QPixmap();
+        image = new QImage();
         initDone = image->load(QString(Texture::IMAGE_PNG.c_str()));
 
         if (initDone) {
@@ -105,7 +102,7 @@ bool Texture::init() {
     return result;
 }
 
-void Texture::setcolor(const QColor color, QImage & image) {
+void Texture::setColor(const QColor color, QImage & image) {
     const int width = image.width() - 1;
     const int height = image.height() - 1;
     const QRgb toSet = color.rgb() ;
@@ -122,6 +119,9 @@ void Texture::setcolor(const QColor color, QImage & image) {
     }
 }
 
+Texture::Texture() {
+}
+
 const bool Texture::DEBUG_ENABLED = false;
 
 const QImage::Format Texture::IMAGE_TYPE = QImage::Format_ARGB32;
@@ -130,7 +130,7 @@ const QImage::Format Texture::IMAGE_TYPE = QImage::Format_ARGB32;
 /* At top of the jar of application. */
 const std::string Texture::IMAGE_PNG = ":/Draw/images/car.png";
 
-QPixmap * Texture::image = nullptr;
+QImage * Texture::image = nullptr;
 
 int Texture::imageH = 0;
 

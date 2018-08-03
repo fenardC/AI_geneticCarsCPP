@@ -1,18 +1,14 @@
 #pragma once
 
-#include <QColor>
-#include <QImage>
-#include <QPixmap>
-#include <string>
-
 #include "Draw/main/inc/Drawer.hpp"
 #include "Draw/main/inc/TextureModifier.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
 
-class Texture {
+#include <QColor>
+#include <QImage>
+#include <string>
 
-    private:
-        Texture();
+class Texture {
 
     public:
         static void deInit();
@@ -25,7 +21,10 @@ class Texture {
         static bool init();
 
     private:
-        static void setcolor(const QColor color, QImage & image);
+        static void setColor(const QColor color, QImage & image);
+
+    private:
+        Texture();
 
     private:
         static const bool DEBUG_ENABLED;
@@ -37,7 +36,7 @@ class Texture {
         static const std::string IMAGE_PNG;
 
     private:
-        static QPixmap * image;
+        static QImage * image;
 
     private:
         static int imageH;
