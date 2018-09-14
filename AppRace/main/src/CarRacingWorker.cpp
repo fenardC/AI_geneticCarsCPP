@@ -1,17 +1,18 @@
+#include "AppRace/main/inc/AppRaceUi.h"
 #include "AppRace/main/inc/CarRacingWorker.hpp"
 #include "AppRace/main/inc/CarParameters.hpp"
 #include "AppRace/main/inc/TrackDataRace.hpp"
 #include "CoreApp/main/inc/CarMotionHelper.hpp"
-
+#include "CObject/main/inc/CDouble.hpp"
 #include "Debug/main/inc/Logger.hpp"
-#include "Draw/main/inc/Drawer.hpp"
+#include "DemoMisc/main/inc/Car.hpp"
+#include "DemoMisc/main/inc/Track.hpp"
 #include "Draw/main/inc/DrawParameterNeuralNetwork.hpp"
 #include "Genetic/main/inc/GeneticDnaNeuralNetwork.hpp"
 #include "Genetic/main/inc/GeneticGeneDouble.hpp"
 #include "Genetic/main/inc/GeneticIndividual.hpp"
-#include "CObject/main/inc/CDouble.hpp"
 #include "Misc/main/inc/BezierSpline2D.hpp"
-#include "TrackData/main/inc/TrackData.hpp"
+#include "Neural/main/inc/NeuralNetwork.hpp"
 #include <memory>
 
 CarRacingWorker::Worker::Worker(CarRacingWorker & parent)
@@ -36,7 +37,7 @@ void CarRacingWorker::Worker::run(Drawer & drawer) {
     else {
         drawer.clear();
         drawer.setColor(QColor(Qt::white));
-        drawer.drawString("RACING APPLICATION FINISHED", 500, 500);
+        drawer.drawString(std::string("RACING APPLICATION FINISHED"), 500, 500);
         drawer.show();
     }
 }
@@ -50,7 +51,7 @@ void CarRacingWorker::Worker::startRunning() {
 void CarRacingWorker::Worker::stopRunning() {
     onRunning = false;
     QTimer::stop();
-    Logger::debug(std::string("Timer has just been stopped."));
+    Logger::trace(std::string("CarRacingWorker::Worker::stopRunning(): Timer has just been stopped."));
 }
 
 void CarRacingWorker::Worker::displayStatistics(Drawer & drawer) const {
@@ -65,7 +66,6 @@ void CarRacingWorker::Worker::displayStatistics(Drawer & drawer) const {
 }
 
 void CarRacingWorker::Worker::doCarRacing(Drawer & drawer) {
-
     Logger::trace(std::string("CarRacingWorker::Worker::doCarRacing()>"));
 
     /* Clear graphics of drawer. */
@@ -166,7 +166,7 @@ void CarRacingWorker::init() {
 
     /* ============ AT BEGINING OF RACE ============ */
     /* Create the car provided the genetic. */
-    car = new Car("TheCar", CAR_SENSOR_TYPE, CAR_RATIO);
+    car = new Car(std::string("TheCar"), CAR_SENSOR_TYPE, CAR_RATIO);
     car->setColor(QColor(Qt::red));
     car->setIndiv(indiv);
     startCarOnTrack(currentTrack, *car);

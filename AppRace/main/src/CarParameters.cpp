@@ -1,7 +1,4 @@
-
 #include "AppRace/main/inc/CarParameters.hpp"
-#include "Debug/main/inc/Logger.hpp"
-
 #include <vector>
 
 
@@ -33,7 +30,6 @@ const double CarParameters::CAR_DNA_100388[] = {
     };
 
 
-
 CarParameters::CarParameters()
     : parameterList() {
     init();
@@ -45,7 +41,6 @@ const CarParameters::NetworkWeights * CarParameters::getNext() const {
 
 /* Initialize DNA with previously learned cars. */
 void CarParameters::init() {
-
     parameterList.push_back(new NetworkWeights(std::string("CAR_DNA_100388: OK"),
                             CarParameters::CAR_DNA_100388));
 

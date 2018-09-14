@@ -1,9 +1,9 @@
 #pragma once
-
+#include "Draw/main/inc/Drawer.hpp"
 #include <string>
 
-#include "Draw/main/inc/Drawer.hpp"
-#include "AppRace/main/inc/CarRacingWorker.hpp"
+class AppRaceUi;
+class CarRacingWorker;
 
 
 class AppRace final {

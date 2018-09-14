@@ -1,4 +1,3 @@
-
 #include "AppRace/main/inc/AppRaceUi.h"
 #include <QtWidgets/QApplication>
 

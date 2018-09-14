@@ -1,8 +1,8 @@
 #include "AppRace/main/inc/AppRace.hpp"
+#include "AppRace/main/inc/AppRaceUi.h"
 #include "AppRace/main/inc/CarRacingWorker.hpp"
 #include "Debug/main/inc/Logger.hpp"
 #include "Draw/main/inc/Drawer.hpp"
-#include "Misc/main/inc/Misc.hpp"
 
 const std::string AppRace::FONT_VERDANA = "Verdana";
 
@@ -14,7 +14,7 @@ AppRace::AppRace(AppRaceUi * mainUi)
 AppRace::~AppRace() {
     std::ostringstream address;
     address << static_cast<void const *>(worker);
-    Logger::debug("~AppRace(): worker: " + address.str());
+    Logger::debug(std::string("AppRace::~AppRace(): worker: " + address.str()));
 
     delete worker;
 }

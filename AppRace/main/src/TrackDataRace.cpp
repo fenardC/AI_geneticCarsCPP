@@ -1,7 +1,5 @@
-
 #include "AppRace/main/inc/TrackDataRace.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
-
 
 TrackDataRace::TrackDataRace()
     : ::TrackData("AppRace/main/inc/TrackDataRace") {

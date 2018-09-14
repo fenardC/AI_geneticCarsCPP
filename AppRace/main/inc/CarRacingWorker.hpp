@@ -1,24 +1,6 @@
-
 #pragma once
-
-#include "AppRace/main/inc/AppRaceUi.h"
-#include "AppRace/main/inc/CarParameters.hpp"
 #include "CoreApp/main/inc/CarMotionHelper.hpp"
-#include "Debug/main/inc/Logger.hpp"
-#include "Draw/main/inc/DrawParameterNeuralNetwork.hpp"
 #include "Draw/main/inc/Drawer.hpp"
-#include "Draw/main/inc/DrawParameterNeuralNetwork.hpp"
-#include "Genetic/main/inc/GeneticDnaNeuralNetwork.hpp"
-#include "Genetic/main/inc/GeneticGeneDouble.hpp"
-#include "Genetic/main/inc/GeneticIndividual.hpp"
-
-#include "Misc/main/inc/BezierSpline2D.hpp"
-
-#include "DemoMisc/main/inc/Car.hpp"
-#include "DemoMisc/main/inc/Track.hpp"
-#include "TrackData/main/inc/TrackData.hpp"
-#include "AppRace/main/inc/TrackDataRace.hpp"
-
 #include <QTimer>
 #include <QObject>
 

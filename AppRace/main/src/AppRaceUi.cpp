@@ -1,24 +1,21 @@
-
 #include "AppRace/main/inc/AppRaceUi.h"
 #include "AppRace/main/inc/AppRace.hpp"
 #include "ui_AppRace.h"
-
-#include <QPainter>
-#include "CoreApp/main/inc/CarMotionHelper.hpp"
 #include "Debug/main/inc/Logger.hpp"
-
+#include "Draw/main/inc/Drawer.hpp"
+#include <QPainter>
 
 AppRaceUi::AppRaceUi(QWidget * parent)
     : QMainWindow(parent)
     , ui(new Ui::AppRaceUi)
     , racer(nullptr) {
-    Logger::debug("AppRaceUi()>");
+    Logger::trace(std::string("AppRaceUi::AppRaceUi()>"));
     ui->setupUi(this);
 
     racer = new AppRace(this);
     racer->startWorker();
 
-    Logger::debug("AppRaceUi()<");
+    Logger::trace(std::string("AppRaceUi::AppRaceUi()<"));
 }
 
 void AppRaceUi::paintEvent(QPaintEvent * e) {
@@ -29,8 +26,9 @@ void AppRaceUi::paintEvent(QPaintEvent * e) {
 }
 
 AppRaceUi::~AppRaceUi() {
+    Logger::trace(std::string("AppRaceUi::~AppRaceUi()>"));
     racer->stopWorker();
     delete racer;
     delete ui;
-    Logger::debug("~AppRaceUi()<");
+    Logger::trace(std::string("AppRaceUi::~AppRaceUi()<"));
 }
