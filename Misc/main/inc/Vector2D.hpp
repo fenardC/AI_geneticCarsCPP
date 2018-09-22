@@ -1,8 +1,5 @@
 #pragma once
 #include <string>
-#include <cmath>
-#include <iostream>
-
 
 class Vector2D {
     public:

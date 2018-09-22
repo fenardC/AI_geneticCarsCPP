@@ -1,5 +1,6 @@
 #include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/Vector2D.hpp"
+#include <cmath>
 
 Vector2D::Vector2D()
     : Vector2D(0, 0) {
@@ -117,8 +118,8 @@ Vector2D * Vector2D::multiply2(const double ratio) const {
 
 std::string Vector2D::toString() const {
     std::string result = std::string("Vector2D(");
-    result +=  std::to_string(x) + std::string(", ") + std::to_string(y);
-    result +=  std::string(")");
+    result += std::to_string(x) + std::string(", ") + std::to_string(y);
+    result += std::string(")");
     return result;
 }
 

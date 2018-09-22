@@ -1,10 +1,11 @@
 #include "CObject/main/inc/CDouble.hpp"
 #include "CObject/main/inc/CInteger.hpp"
 #include "Debug/main/inc/Logger.hpp"
-#include "Misc/main/inc/Vector2D.hpp"
 #include "Misc/main/inc/Misc.hpp"
+#include "Misc/main/inc/Vector2D.hpp"
 
 #include <memory>
+#include <sstream>
 
 static void testApp() {
 
@@ -93,22 +94,28 @@ static void testApp() {
 
     {
         for (int i = 0; i < 10 ; i++) {
+            std::stringstream resultOfRandom;
             bool res = Misc::random(50.0);
-            std::cout << std::string("Misc::random(50.0) returned: ") << std::boolalpha << res << std::noboolalpha << std::endl;
+            resultOfRandom << std::string("Misc::random(50.0) returned: ") << std::boolalpha << res << std::noboolalpha << std::endl;
+            Logger::info(resultOfRandom.str());
         }
     }
 
     {
         for (int i = 0; i < 10 ; i++) {
+            std::stringstream resultOfRandom;
             double res = Misc::random(0.0, 5.0);
-            std::cout << std::string("Misc::random(double, double) returned: ") + std::to_string(res) << std::endl;
+            resultOfRandom << std::string("Misc::random(double, double) returned: ") + std::to_string(res) << std::endl;
+            Logger::info(resultOfRandom.str());
         }
     }
 
     {
         for (int i = 0; i < 10 ; i++) {
+            std::stringstream resultOfRandom;
             int res = Misc::random(0, 5);
-            std::cout << std::string("Misc::random(int, int) returned: ") + std::to_string(res) << std::endl;
+            resultOfRandom << std::string("Misc::random(int, int) returned: ") + std::to_string(res) << std::endl;
+            Logger::info(resultOfRandom.str());
         }
     }
 

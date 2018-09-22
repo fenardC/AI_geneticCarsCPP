@@ -1,8 +1,10 @@
+/* Force initialization of cout before static object construction. */
+#include <iostream>
+
 #include "Debug/main/inc/Logger.hpp"
 #include "Misc/main/inc/Misc.hpp"
-
-#include <map>
 #include <iterator>
+#include <map>
 
 double Misc::bound(const double val, const int low, const int high) { /*const*/
     double result = val;
@@ -34,13 +36,13 @@ QColor Misc::mix(const int fromRgbMin, const int toRgbMax, const double ratio) {
 
 bool Misc::random(const double chanceInPercent) {
     std::uniform_real_distribution<double> dist(0.0, 100.0);
-    const double randomInPercent = dist(generator);
+    const double randomInPercent = dist(randomGenerator);
     return chanceInPercent > randomInPercent ? true : false;
 }
 
 double Misc::random(const double min, const double max) {
     std::uniform_real_distribution<double> dist(min, max);
-    return dist(generator);
+    return dist(randomGenerator);
 }
 
 /* max value is excluded (as JAVA case).*/
@@ -49,7 +51,7 @@ int Misc::random(const int min, const int max) {
 
     if (0 < max) {
         std::uniform_int_distribution<int> dist(min, max - 1);
-        result = dist(generator);
+        result = dist(randomGenerator);
     }
 
     return result;
@@ -65,22 +67,22 @@ Misc::randomInWeightedMap(const std::map<std::shared_ptr<GeneticIndividual>, dou
 Misc::Misc() {
 }
 
-std::mt19937 Misc::initGenerator(bool withSeeding) {
+std::mt19937 Misc::initRandomGenerator(bool withSeeding) {
     std::mt19937 generator(0);
-    Logger::trace(std::string("Misc::initGenerator>()"));
+    Logger::trace(std::string("Misc::initRandomGenerator>()"));
 
     if (withSeeding) {
         /* Will be used to obtain a seed for the random number engine. */
         std::random_device rd;
         generator = std::mt19937(rd());
-        Logger::info(std::string("Misc::initGenerator(): seeding done."));
+        Logger::info(std::string("Misc::initRandomGenerator(): seeding done."));
     }
 
-    Logger::trace(std::string("Misc::initGenerator<()"));
+    Logger::trace(std::string("Misc::initRandomGenerator<()"));
     return generator;
 }
 
 
 /* One single random generator for all random numbers. */
 /* Standard mersenne_twister_engine seeded with rd() */
-std::mt19937 Misc::generator = Misc::initGenerator(true);
+std::mt19937 Misc::randomGenerator = Misc::initRandomGenerator(true);

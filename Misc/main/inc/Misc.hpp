@@ -37,11 +37,11 @@ class Misc {
 
         /* One single random generator for all random numbers. */
     private:
-        static std::mt19937 generator;
+        static std::mt19937 randomGenerator;
 
     private:
         Misc();
 
     private:
-        static std::mt19937 initGenerator(bool withSeeding);
+        static std::mt19937 initRandomGenerator(bool withSeeding);
 };
